@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thirty Merton — SafeCan Operational Proposal | Skygrid</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:14px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#0a0d1a;color:#e8eaf0;line-height:1.5;overflow-x:hidden}
+
+:root{
+  --red:#E30613;--red-dim:rgba(227,6,19,0.12);--red-glow:rgba(227,6,19,0.25);
+  --green:#00c896;--green-dim:rgba(0,200,150,0.12);
+  --blue:#4da6ff;--blue-dim:rgba(77,166,255,0.12);
+  --yellow:#f5a623;--yellow-dim:rgba(245,166,35,0.12);
+  --purple:#9c7fff;--purple-dim:rgba(156,127,255,0.12);
+  --orange:#ff6b35;
+  --card:#13172a;--border:rgba(255,255,255,0.07);
+  --text:#e8eaf0;--dim:#8892a4;--faint:#4a5268;
+  --hdr:#0d1020;
+}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(10,13,26,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.tb-left{display:flex;align-items:center;gap:18px}
+.sc-logo{width:38px;height:38px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;letter-spacing:.5px;flex-shrink:0;box-shadow:0 0 20px var(--red-glow)}
+.tb-title{font-size:14px;font-weight:700;color:var(--text)}
+.tb-sub{font-size:11px;color:var(--dim);margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:16px}
+.tb-client{font-size:11px;font-weight:700;color:var(--dim);letter-spacing:1px;text-transform:uppercase}
+.tb-client span{color:var(--blue)}
+.conf-badge{background:var(--red-dim);border:1px solid rgba(227,6,19,0.3);color:var(--red);font-size:9px;font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:60px 40px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(227,6,19,0.07) 0%,transparent 70%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 100% 80% at 50% 50%,black 0%,transparent 75%)}
+.hero-content{position:relative;z-index:2;max-width:900px}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:10px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:40px;height:1px;background:var(--red);opacity:.4}
+.hero-title{font-size:clamp(42px,6vw,72px);font-weight:900;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;background:linear-gradient(135deg,#fff 40%,rgba(255,255,255,0.5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-title .accent{-webkit-text-fill-color:var(--red)}
+.hero-sub{font-size:16px;color:var(--dim);margin-bottom:50px;max-width:600px;margin-left:auto;margin-right:auto;line-height:1.7}
+.hero-stats{display:flex;gap:0;justify-content:center;border:1px solid var(--border);border-radius:12px;background:rgba(19,23,42,0.8);backdrop-filter:blur(10px);overflow:hidden;max-width:700px;margin:0 auto}
+.hero-stat{flex:1;padding:24px 20px;text-align:center;border-right:1px solid var(--border);position:relative}
+.hero-stat:last-child{border-right:none}
+.hero-stat-num{font-size:32px;font-weight:900;line-height:1;margin-bottom:6px}
+.hero-stat-num.red{color:var(--red)}
+.hero-stat-num.green{color:var(--green)}
+.hero-stat-num.blue{color:var(--blue)}
+.hero-stat-num.yellow{color:var(--yellow)}
+.hero-stat-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--faint);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+.scroll-arrow{width:20px;height:20px;border-right:2px solid var(--faint);border-bottom:2px solid var(--faint);transform:rotate(45deg);margin-top:-4px}
+
+/* ── SECTION ── */
+.section{padding:80px 40px;max-width:1400px;margin:0 auto}
+.section-hdr{text-align:center;margin-bottom:56px}
+.section-tag{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:12px;display:block}
+.section-title{font-size:clamp(28px,4vw,42px);font-weight:900;letter-spacing:-1px;color:var(--text);line-height:1.1;margin-bottom:14px}
+.section-desc{font-size:14px;color:var(--dim);max-width:580px;margin:0 auto;line-height:1.7}
+
+/* ── DIVIDER ── */
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0}
+
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:0}
+@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 18px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.kpi:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi.red::before{background:var(--red);box-shadow:0 0 12px var(--red-glow)}
+.kpi.green::before{background:var(--green)}
+.kpi.blue::before{background:var(--blue)}
+.kpi.yellow::before{background:var(--yellow)}
+.kpi.purple::before{background:var(--purple)}
+.kpi.orange::before{background:var(--orange)}
+.kpi-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.kpi-icon{font-size:16px;opacity:.5}
+.kpi-num{font-size:28px;font-weight:900;line-height:1;margin-bottom:6px}
+.kpi.red .kpi-num{color:var(--red)}
+.kpi.green .kpi-num{color:var(--green)}
+.kpi.blue .kpi-num{color:var(--blue)}
+.kpi.yellow .kpi-num{color:var(--yellow)}
+.kpi.purple .kpi-num{color:var(--purple)}
+.kpi.orange .kpi-num{color:var(--orange)}
+.kpi-sub{font-size:10px;color:var(--dim)}
+
+/* ── PRODUCTIVITY MATRIX ── */
+.prod-container{display:grid;grid-template-columns:1fr 1.8fr;gap:24px;align-items:start}
+@media(max-width:900px){.prod-container{grid-template-columns:1fr}}
+.prod-controls{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px}
+.prod-title-sm{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:20px}
+.slider-group{margin-bottom:24px}
+.slider-label{font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.slider-val{font-size:18px;font-weight:900;color:var(--red)}
+.slider-unit{font-size:10px;color:var(--dim);font-weight:400}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:rgba(255,255,255,.1);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--red);cursor:pointer;box-shadow:0 0 10px var(--red-glow)}
+.phase-selector{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.phase-btn{flex:1;padding:8px 4px;font-size:10px;font-weight:700;letter-spacing:.5px;text-align:center;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--dim);cursor:pointer;transition:all .15s;min-width:80px}
+.phase-btn.active-purple{border-color:var(--purple);background:var(--purple-dim);color:var(--purple)}
+.phase-btn.active-blue{border-color:var(--blue);background:var(--blue-dim);color:var(--blue)}
+.phase-btn.active-green{border-color:var(--green);background:var(--green-dim);color:var(--green)}
+.phase-btn.active-yellow{border-color:var(--yellow);background:var(--yellow-dim);color:var(--yellow)}
+.prod-result-row{display:flex;gap:12px;margin-top:4px}
+.prod-result{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}
+.prod-result-num{font-size:22px;font-weight:900;line-height:1;margin-bottom:4px}
+.prod-result-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)}
+
+.prod-chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px}
+.prod-bars{display:flex;flex-direction:column;gap:16px;margin-top:8px}
+.bar-row{display:flex;align-items:center;gap:14px}
+.bar-label{font-size:11px;font-weight:700;color:var(--text);width:130px;flex-shrink:0}
+.bar-track{flex:1;height:28px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:12px;font-size:10px;font-weight:700;color:rgba(255,255,255,.9);transition:width .8s cubic-bezier(.4,0,.2,1);position:relative;white-space:nowrap;min-width:80px}
+.bar-fill::after{content:attr(data-val);position:absolute;right:10px;color:rgba(255,255,255,.7);font-size:10px;font-weight:700}
+.bar-crew{font-size:10px;color:var(--dim);width:55px;text-align:right;flex-shrink:0}
+
+/* ── GANTT ── */
+.gantt-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.gantt-hdr{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.gantt-hdr-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+.gantt-legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.gantt-leg-item{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:var(--dim)}
+.gantt-leg-dot{width:10px;height:10px;border-radius:2px}
+.gantt-body{padding:0 24px 24px;overflow-x:auto}
+.gantt-weeks{display:grid;padding:12px 0 8px 180px;gap:0}
+.week-label{font-size:9px;font-weight:700;color:var(--faint);text-align:center;letter-spacing:.5px}
+.gantt-row{display:flex;align-items:center;margin-bottom:10px;min-height:36px}
+.gantt-row-label{width:180px;flex-shrink:0;padding-right:16px}
+.gantt-row-name{font-size:11px;font-weight:700;color:var(--text)}
+.gantt-row-sub{font-size:9px;color:var(--faint);margin-top:1px}
+.gantt-timeline{flex:1;display:grid;gap:3px;position:relative;height:36px}
+.gantt-bar{height:30px;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-size:9px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.3px;position:absolute;top:3px;transition:opacity .2s;cursor:default;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gantt-bar:hover{opacity:.8;z-index:10}
+.bar-rough{background:linear-gradient(90deg,rgba(156,127,255,.8),rgba(156,127,255,.5));border:1px solid rgba(156,127,255,.3)}
+.bar-fine{background:linear-gradient(90deg,rgba(77,166,255,.8),rgba(77,166,255,.5));border:1px solid rgba(77,166,255,.3)}
+.bar-pdi{background:linear-gradient(90deg,rgba(0,200,150,.8),rgba(0,200,150,.5));border:1px solid rgba(0,200,150,.3)}
+.bar-nonres{background:linear-gradient(90deg,rgba(245,166,35,.8),rgba(245,166,35,.5));border:1px solid rgba(245,166,35,.3)}
+.bar-qc{background:linear-gradient(90deg,rgba(227,6,19,.7),rgba(227,6,19,.4));border:1px solid rgba(227,6,19,.3)}
+.gantt-today{position:absolute;top:0;bottom:0;width:2px;background:var(--red);opacity:.4;z-index:5}
+.week-bg{position:absolute;top:0;bottom:0;background:rgba(255,255,255,.015);pointer-events:none}
+.milestone{position:absolute;top:50%;transform:translateY(-50%);font-size:12px;z-index:8;cursor:default}
+.milestone-label{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:700;color:var(--yellow);white-space:nowrap;letter-spacing:.5px}
+
+/* ── DEPLOYMENT MODEL ── */
+.deploy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.deploy-grid{grid-template-columns:1fr}}
+.deploy-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.deploy-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.3)}
+.deploy-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.deploy-card.red::before{background:var(--red)}
+.deploy-card.blue::before{background:var(--blue)}
+.deploy-card.green::before{background:var(--green)}
+.deploy-card.purple::before{background:var(--purple)}
+.deploy-card.yellow::before{background:var(--yellow)}
+.deploy-card.orange::before{background:var(--orange)}
+.deploy-icon{font-size:32px;margin-bottom:16px}
+.deploy-card-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px}
+.deploy-card-sub{font-size:11px;color:var(--dim);line-height:1.6;margin-bottom:16px}
+.deploy-items{display:flex;flex-direction:column;gap:6px}
+.deploy-item{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--dim)}
+.deploy-item::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0;background:currentColor;opacity:.5}
+.deploy-item.red{color:var(--red)}
+.deploy-item.green{color:var(--green)}
+.deploy-item.blue{color:var(--blue)}
+.deploy-item.purple{color:var(--purple)}
+.deploy-item.yellow{color:var(--yellow)}
+
+/* ── TECH STACK ── */
+.tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:1100px;margin:0 auto}
+@media(max-width:900px){.tech-grid{grid-template-columns:1fr}}
+.tech-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;gap:0;transition:transform .2s,box-shadow .2s}
+.tech-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+.tech-accent{width:5px;flex-shrink:0}
+.tech-accent.red{background:var(--red)}
+.tech-accent.blue{background:var(--blue)}
+.tech-accent.green{background:var(--green)}
+.tech-accent.purple{background:var(--purple)}
+.tech-body{padding:24px;flex:1}
+.tech-tag{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.tech-tag.red{color:var(--red)}
+.tech-tag.blue{color:var(--blue)}
+.tech-tag.green{color:var(--green)}
+.tech-tag.purple{color:var(--purple)}
+.tech-name{font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px}
+.tech-desc{font-size:11px;color:var(--dim);line-height:1.6;margin-bottom:14px}
+.tech-features{display:flex;flex-wrap:wrap;gap:6px}
+.tech-feat{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px}
+.tech-feat.red{background:var(--red-dim);color:var(--red)}
+.tech-feat.blue{background:var(--blue-dim);color:var(--blue)}
+.tech-feat.green{background:var(--green-dim);color:var(--green)}
+.tech-feat.purple{background:var(--purple-dim);color:var(--purple)}
+
+/* ── COMM FLOW ── */
+.flow-container{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:40px;overflow-x:auto}
+.flow-steps{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:nowrap;min-width:700px}
+.flow-step{display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;flex:1}
+.flow-step-icon{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid;position:relative}
+.flow-step-icon.red{background:var(--red-dim);border-color:rgba(227,6,19,.4)}
+.flow-step-icon.blue{background:var(--blue-dim);border-color:rgba(77,166,255,.4)}
+.flow-step-icon.green{background:var(--green-dim);border-color:rgba(0,200,150,.4)}
+.flow-step-icon.purple{background:var(--purple-dim);border-color:rgba(156,127,255,.4)}
+.flow-step-icon.yellow{background:var(--yellow-dim);border-color:rgba(245,166,35,.4)}
+.flow-step-icon.orange{background:rgba(255,107,53,.12);border-color:rgba(255,107,53,.4)}
+.flow-step-num{position:absolute;top:-8px;right:-8px;width:18px;height:18px;border-radius:50%;background:#0a0d1a;border:2px solid var(--border);font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;color:var(--dim)}
+.flow-step-title{font-size:11px;font-weight:700;color:var(--text);text-align:center;line-height:1.3}
+.flow-step-sub{font-size:9px;color:var(--faint);text-align:center;line-height:1.4;max-width:90px}
+.flow-arrow{width:40px;height:2px;background:linear-gradient(90deg,var(--border),rgba(255,255,255,.15));flex-shrink:0;position:relative;margin-top:-30px}
+.flow-arrow::after{content:'▶';position:absolute;right:-6px;top:-7px;font-size:10px;color:var(--faint)}
+
+/* ── QA SECTION ── */
+.qa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:900px){.qa-grid{grid-template-columns:repeat(2,1fr)}}
+.qa-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;transition:transform .2s}
+.qa-card:hover{transform:translateY(-3px)}
+.qa-num{font-size:38px;font-weight:900;line-height:1;margin-bottom:8px}
+.qa-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.qa-desc{font-size:11px;color:var(--dim);line-height:1.5}
+
+/* ── FLOOR BREAKDOWN ── */
+.floor-table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.floor-table{width:100%;border-collapse:collapse}
+.floor-table th{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);padding:12px 18px;text-align:left;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border)}
+.floor-table td{padding:11px 18px;font-size:12px;color:var(--text);border-bottom:1px solid rgba(255,255,255,.04)}
+.floor-table tr:last-child td{border-bottom:none;font-weight:700;background:rgba(255,255,255,.02)}
+.floor-table tr:hover:not(:last-child) td{background:rgba(255,255,255,.02)}
+.floor-table .mono{font-family:monospace;color:var(--red)}
+.floor-table .dim{color:var(--dim)}
+.mini-bar{display:inline-flex;align-items:center;gap:8px;width:100%}
+.mini-track{flex:1;height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;min-width:60px}
+.mini-fill{height:100%;border-radius:3px}
+.phase-pill{display:inline-block;font-size:8px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.5px;text-transform:uppercase}
+.pill-purple{background:var(--purple-dim);color:var(--purple)}
+.pill-blue{background:var(--blue-dim);color:var(--blue)}
+.pill-green{background:var(--green-dim);color:var(--green)}
+.pill-yellow{background:var(--yellow-dim);color:var(--yellow)}
+.pill-grey{background:rgba(255,255,255,.07);color:var(--dim)}
+
+/* ── FOOTER ── */
+.footer-section{background:var(--hdr);border-top:1px solid var(--border);padding:60px 40px;text-align:center}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px}
+.footer-tagline{font-size:12px;color:var(--dim);margin-bottom:30px;line-height:1.6;max-width:500px;margin-left:auto;margin-right:auto}
+.footer-contact{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.footer-contact-item{text-align:center}
+.footer-contact-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
+.footer-contact-val{font-size:13px;font-weight:700;color:var(--text)}
+.footer-divider{width:60px;height:2px;background:var(--red);margin:0 auto 24px;opacity:.4}
+.footer-copy{font-size:10px;color:var(--faint)}
+.footer-copy span{color:var(--red)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes countUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.animate{opacity:0;animation:fadeUp .7s ease forwards}
+.animate.visible{animation:fadeUp .7s ease forwards}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;letter-spacing:.5px;padding:3px 9px;border-radius:4px;text-transform:uppercase}
+.badge-red{background:var(--red-dim);color:var(--red)}
+.badge-green{background:var(--green-dim);color:var(--green)}
+.badge-blue{background:var(--blue-dim);color:var(--blue)}
+.badge-yellow{background:var(--yellow-dim);color:var(--yellow)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+/* ── MISC ── */
+.text-red{color:var(--red)}
+.text-green{color:var(--green)}
+.text-blue{color:var(--blue)}
+.text-dim{color:var(--dim)}
+.mt-40{margin-top:40px}
+.mt-24{margin-top:24px}
+.bold{font-weight:700}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px}
+</style>
+</head>
+<body>
+
+<!-- ══ TOP BAR ══ -->
+<div class="topbar">
+  <div class="tb-left">
+    <div class="sc-logo">SC</div>
+    <div>
+      <div class="tb-title">SafeCan Inc. — Operational Proposal</div>
+      <div class="tb-sub">Thirty Merton · Post-Construction Cleaning Services</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <div class="tb-client">Prepared for <span>Skygrid</span></div>
+    <div class="conf-badge">Confidential</div>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">SafeCan Inc. × Skygrid · May 2026</div>
+    <h1 class="hero-title">Built Around<br><span class="accent">Your Schedule.</span><br>Delivered On Ours.</h1>
+    <p class="hero-sub">A data-driven operational proposal for Thirty Merton — covering every square foot, every phase, every floor. Backed by real-time technology and a crew deployment model built for high-rise precision.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num red" id="cnt-sf">0</div>
+        <div class="hero-stat-label">Total Sq Ft</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num blue" id="cnt-floors">0</div>
+        <div class="hero-stat-label">Total Levels</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num green" id="cnt-suites">0</div>
+        <div class="hero-stat-label">Res. Suites</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num yellow" id="cnt-phases">0</div>
+        <div class="hero-stat-label">Clean Phases</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">Explore<div class="scroll-arrow"></div></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ SCOPE OVERVIEW ══ -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-tag">01 · Project Scope</span>
+    <h2 class="section-title">Thirty Merton at a Glance</h2>
+    <p class="section-desc">A complete floor-by-floor breakdown of the cleaning scope — residential, commercial, amenity, and common areas across all 39 levels.</p>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi red"><div class="kpi-label">Cleanable SF <span class="kpi-icon">📐</span></div><div class="kpi-num">316,831</div><div class="kpi-sub">Res. + Non-Res (excl. parking)</div></div>
+    <div class="kpi blue"><div class="kpi-label">Residential SF <span class="kpi-icon">🏠</span></div><div class="kpi-num">233,806</div><div class="kpi-sub">91 suites · 3 clean phases</div></div>
+    <div class="kpi purple"><div class="kpi-label">Non-Res SF <span class="kpi-icon">🏢</span></div><div class="kpi-num">83,025</div><div class="kpi-sub">Common · Amenity · Retail · Comm.</div></div>
+    <div class="kpi green"><div class="kpi-label">Total Levels <span class="kpi-icon">🏗️</span></div><div class="kpi-num">39</div><div class="kpi-sub">P1–P4 + L1–L35 incl. roof</div></div>
+    <div class="kpi yellow"><div class="kpi-label">Labour Hours <span class="kpi-icon">⏱</span></div><div class="kpi-num">4,385</div><div class="kpi-sub">Total across all phases</div></div>
+    <div class="kpi orange"><div class="kpi-label">Clean Phases <span class="kpi-icon">✅</span></div><div class="kpi-num">4</div><div class="kpi-sub">Rough · Fine · PDI · Non-Res Final</div></div>
+  </div>
+
+  <div class="floor-table-wrap mt-40">
+    <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim)">Floor-by-Floor Scope Summary</span>
+      <div style="display:flex;gap:10px">
+        <span class="phase-pill pill-purple">Rough</span>
+        <span class="phase-pill pill-blue">Fine</span>
+        <span class="phase-pill pill-green">PDI</span>
+        <span class="phase-pill pill-yellow">Non-Res Final</span>
+      </div>
+    </div>
+    <table class="floor-table">
+      <thead>
+        <tr>
+          <th>Level</th>
+          <th>Description</th>
+          <th>Res. Suites</th>
+          <th>Total SF</th>
+          <th>SF Distribution</th>
+          <th>Phase(s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono">P1–P4</td><td class="dim">Parking Levels</td><td class="dim">—</td><td>82,450</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:21%;background:var(--faint)"></div></div><span style="font-size:10px;color:var(--faint)">21%</span></div></td><td><span class="phase-pill pill-grey">Outsourced</span></td></tr>
+        <tr><td class="mono">L1–Mez</td><td class="dim">Podium Base + Lobby</td><td class="dim">—</td><td>8,475</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:3%;background:var(--yellow)"></div></div><span style="font-size:10px;color:var(--dim)">3%</span></div></td><td><span class="phase-pill pill-yellow">Non-Res Final</span></td></tr>
+        <tr><td class="mono">L2</td><td class="dim">Commercial + Admin</td><td class="dim">—</td><td>13,550</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:4%;background:var(--yellow)"></div></div><span style="font-size:10px;color:var(--dim)">4%</span></div></td><td><span class="phase-pill pill-yellow">Non-Res Final</span></td></tr>
+        <tr><td class="mono">L3–L7</td><td class="dim">Podium Residential</td><td>48 suites</td><td>69,956</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:18%;background:var(--purple)"></div></div><span style="font-size:10px;color:var(--dim)">18%</span></div></td><td><span class="phase-pill pill-purple">Rough</span> <span class="phase-pill pill-blue">Fine</span> <span class="phase-pill pill-green">PDI</span></td></tr>
+        <tr><td class="mono">L8–L32</td><td class="dim">Main Tower (25 floors)</td><td>10 / floor</td><td>197,250</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:51%;background:var(--blue)"></div></div><span style="font-size:10px;color:var(--blue)">51%</span></div></td><td><span class="phase-pill pill-purple">Rough</span> <span class="phase-pill pill-blue">Fine</span> <span class="phase-pill pill-green">PDI</span></td></tr>
+        <tr><td class="mono">L33–L34</td><td class="dim">Upper Tower / Penthouse</td><td>16 suites</td><td>14,775</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:4%;background:var(--blue)"></div></div><span style="font-size:10px;color:var(--dim)">4%</span></div></td><td><span class="phase-pill pill-purple">Rough</span> <span class="phase-pill pill-blue">Fine</span> <span class="phase-pill pill-green">PDI</span></td></tr>
+        <tr><td class="mono">L35</td><td class="dim">Roof / Mechanical</td><td class="dim">—</td><td>3,000</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:1%;background:var(--faint)"></div></div><span style="font-size:10px;color:var(--faint)">1%</span></div></td><td><span class="phase-pill pill-yellow">Non-Res Final</span></td></tr>
+        <tr style="font-weight:700"><td class="mono text-red">TOTAL</td><td>All Levels</td><td class="text-green">91 suites</td><td class="text-red">389,631 SF</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ PRODUCTIVITY MATRIX ══ -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-tag">02 · Productivity Matrix</span>
+    <h2 class="section-title">Daily Output Engine</h2>
+    <p class="section-desc">Our productivity rates are measured — not estimated. Adjust crew size to model exactly how much square footage gets completed each day, and how long each phase takes.</p>
+  </div>
+
+  <div class="prod-container">
+    <div class="prod-controls">
+      <div class="prod-title-sm">Interactive Calculator</div>
+
+      <div class="slider-group">
+        <div class="slider-label">Crew Size <span><span class="slider-val" id="crew-display">8</span> <span class="slider-unit">workers</span></span></div>
+        <input type="range" min="4" max="20" value="8" id="crew-slider" oninput="updateCalc()">
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--faint);margin-top:4px"><span>4 min</span><span>12 optimal</span><span>20 max</span></div>
+      </div>
+
+      <div class="prod-title-sm" style="margin-bottom:12px">Select Phase</div>
+      <div class="phase-selector">
+        <div class="phase-btn active-purple" onclick="selectPhase(this,'purple',150,'Rough Clean','Residential SF',233806)" data-rate="150" data-sf="233806">🔵 Phase 1<br>Rough Clean<br><span style="font-size:9px;font-weight:400">150 SF/hr</span></div>
+        <div class="phase-btn" onclick="selectPhase(this,'blue',185,'Fine Clean','Residential SF',233806)" data-rate="185" data-sf="233806">🔷 Phase 2<br>Fine Clean<br><span style="font-size:9px;font-weight:400">185 SF/hr</span></div>
+        <div class="phase-btn" onclick="selectPhase(this,'green',210,'PDI / Final','Residential SF',233806)" data-rate="210" data-sf="233806">✅ Phase 3<br>PDI / Final<br><span style="font-size:9px;font-weight:400">210 SF/hr</span></div>
+        <div class="phase-btn" onclick="selectPhase(this,'yellow',185,'Non-Res Final','Non-Res SF',83025)" data-rate="185" data-sf="83025">🏢 Non-Res<br>Final Clean<br><span style="font-size:9px;font-weight:400">185 SF/hr</span></div>
+      </div>
+
+      <div class="prod-result-row">
+        <div class="prod-result">
+          <div class="prod-result-num text-red" id="res-sfday">9,600</div>
+          <div class="prod-result-lbl">SF / Day</div>
+        </div>
+        <div class="prod-result">
+          <div class="prod-result-num text-green" id="res-days">24</div>
+          <div class="prod-result-lbl">Working Days</div>
+        </div>
+        <div class="prod-result">
+          <div class="prod-result-num text-blue" id="res-hrs">64</div>
+          <div class="prod-result-lbl">Hrs / Day</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(255,255,255,.03);border-radius:6px;font-size:10px;color:var(--dim);line-height:1.6">
+        <span id="calc-explain">8 workers × 8 hrs × 150 SF/hr = 9,600 SF/day · 233,806 SF ÷ 9,600 = 24 days</span>
+      </div>
+    </div>
+
+    <div class="prod-chart-card">
+      <div class="prod-title-sm" style="margin-bottom:20px">Daily Output Capacity — All Crew Configurations</div>
+      <div class="prod-bars" id="prod-bars"></div>
+      <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
+        <canvas id="prod-chart" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ GANTT / SCHEDULE MATRIX ══ -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-tag">03 · Schedule Matrix</span>
+    <h2 class="section-title">Phase-by-Phase Gantt</h2>
+    <p class="section-desc">A rolling 16-week schedule showing how SafeCan sequences cleaning phases floor by floor — starting at the podium and working up the tower in parallel streams.</p>
+  </div>
+
+  <div class="gantt-wrap">
+    <div class="gantt-hdr">
+      <div>
+        <div class="gantt-hdr-title">Thirty Merton — 16-Week Rolling Schedule</div>
+        <div style="font-size:10px;color:var(--faint);margin-top:3px">Based on 8-crew standard deployment · Assumes construction handover by Week 1</div>
+      </div>
+      <div class="gantt-legend">
+        <div class="gantt-leg-item"><div class="gantt-leg-dot" style="background:var(--purple)"></div>Rough Clean</div>
+        <div class="gantt-leg-item"><div class="gantt-leg-dot" style="background:var(--blue)"></div>Fine Clean</div>
+        <div class="gantt-leg-item"><div class="gantt-leg-dot" style="background:var(--green)"></div>PDI / Final</div>
+        <div class="gantt-leg-item"><div class="gantt-leg-dot" style="background:var(--yellow)"></div>Non-Res Final</div>
+        <div class="gantt-leg-item"><div class="gantt-leg-dot" style="background:var(--red)"></div>QC & Handover</div>
+      </div>
+    </div>
+
+    <div class="gantt-body">
+      <div style="display:flex;padding-left:190px;gap:0;border-bottom:1px solid var(--border);padding-bottom:8px;padding-top:12px">
+        <div id="gantt-week-labels" style="display:flex;gap:0;width:100%"></div>
+      </div>
+      <div id="gantt-rows" style="margin-top:12px;position:relative"></div>
+      <div style="margin-top:16px;padding:14px 18px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;display:flex;gap:24px;flex-wrap:wrap">
+        <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Total Duration</span><br><span style="font-size:16px;font-weight:900;color:var(--text)">16 Weeks</span></div>
+        <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Phases Running Concurrently</span><br><span style="font-size:16px;font-weight:900;color:var(--blue)">Up to 3</span></div>
+        <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Peak Week Crew Count</span><br><span style="font-size:16px;font-weight:900;color:var(--green)">16–20 workers</span></div>
+        <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Phase Sign-offs</span><br><span style="font-size:16px;font-weight:900;color:var(--yellow)">Per Floor</span></div>
+        <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Handover Target</span><br><span style="font-size:16px;font-weight:900;color:var(--red)">Week 16</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ CREW DEPLOYMENT MODEL ══ -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-tag">04 · Crew Deployment Model</span>
+    <h2 class="section-title">How We Staff. How We Scale.</h2>
+    <p class="section-desc">SafeCan's deployment model is built for high-rise sequencing — crews are staged floor by floor, and scaled up or down based on construction turnover pace.</p>
+  </div>
+  <div class="deploy-grid">
+    <div class="deploy-card red">
+      <div class="deploy-icon">🎯</div>
+      <div class="deploy-card-title">Dispatch Protocol</div>
+      <div class="deploy-card-sub">Every crew is dispatched through our automated system — 24 hours before mobilization. Crew leads receive a full brief with job number, floor assignment, phase, supervisor contact, and check-in link.</div>
+      <div class="deploy-items">
+        <div class="deploy-item red">Auto-dispatch 24 hrs prior</div>
+        <div class="deploy-item red">Job # + floor assignment in brief</div>
+        <div class="deploy-item red">SMS + Email confirmation</div>
+        <div class="deploy-item red">Supervisor escalation path included</div>
+      </div>
+    </div>
+    <div class="deploy-card blue">
+      <div class="deploy-icon">📍</div>
+      <div class="deploy-card-title">GPS Check-In / Check-Out</div>
+      <div class="deploy-card-sub">Every crew member checks in on arrival via our live web app — capturing GPS location, timestamp, and photo documentation. Missed check-ins trigger an automated alert within 15 minutes.</div>
+      <div class="deploy-items">
+        <div class="deploy-item blue">GPS-stamped arrival + departure</div>
+        <div class="deploy-item blue">Photo upload per area completed</div>
+        <div class="deploy-item blue">15-min missed check-in alert</div>
+        <div class="deploy-item blue">Real-time supervisor dashboard</div>
+      </div>
+    </div>
+    <div class="deploy-card green">
+      <div class="deploy-icon">📊</div>
+      <div class="deploy-card-title">Live Operations Monitor</div>
+      <div class="deploy-card-sub">Skygrid gets access to our Field Operations Monitor — a live dashboard showing every active crew, floor status, phase progress, and area completion across the entire project in real time.</div>
+      <div class="deploy-items">
+        <div class="deploy-item green">Live crew tracking per floor</div>
+        <div class="deploy-item green">Phase completion % by area</div>
+        <div class="deploy-item green">Downloadable daily logs</div>
+        <div class="deploy-item green">Client-facing progress view</div>
+      </div>
+    </div>
+    <div class="deploy-card purple">
+      <div class="deploy-icon">📅</div>
+      <div class="deploy-card-title">Rolling Floor Sequencing</div>
+      <div class="deploy-card-sub">Rather than waiting for full-building handover, SafeCan sequences crews floor by floor as construction turns over — maximizing productivity and compressing the overall timeline.</div>
+      <div class="deploy-items">
+        <div class="deploy-item purple">Starts at podium as floors clear</div>
+        <div class="deploy-item purple">3 phase streams run concurrently</div>
+        <div class="deploy-item purple">Crew count scales with turnover rate</div>
+        <div class="deploy-item purple">Weekly schedule reviews with GC</div>
+      </div>
+    </div>
+    <div class="deploy-card yellow">
+      <div class="deploy-icon">⚡</div>
+      <div class="deploy-card-title">Scalable Crew Model</div>
+      <div class="deploy-card-sub">Our crew model scales from a minimum of 6 workers to a peak of 20 depending on phase overlap and construction handover pace. Surge capacity can be activated within 48 hours.</div>
+      <div class="deploy-items">
+        <div class="deploy-item yellow">Min 6 / standard 8 / peak 20 crew</div>
+        <div class="deploy-item yellow">48-hr surge capacity activation</div>
+        <div class="deploy-item yellow">Phase overlap maximizes speed</div>
+        <div class="deploy-item yellow">Dedicated site supervisor on-call</div>
+      </div>
+    </div>
+    <div class="deploy-card orange">
+      <div class="deploy-icon">🛡️</div>
+      <div class="deploy-card-title">Quality Assurance</div>
+      <div class="deploy-card-sub">Every floor is signed off before the next phase begins. Our QA checklist is completed digitally, with photographic evidence, and a floor-level sign-off submitted to Skygrid before PDI.</div>
+      <div class="deploy-items">
+        <div class="deploy-item" style="color:var(--orange)">Digital floor sign-off per phase</div>
+        <div class="deploy-item" style="color:var(--orange)">Photo documentation per area</div>
+        <div class="deploy-item" style="color:var(--orange)">Deficiency flagging + resolution</div>
+        <div class="deploy-item" style="color:var(--orange)">GC/client walkthrough support</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ TECH STACK ══ -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-tag">05 · Technology Stack</span>
+    <h2 class="section-title">The Infrastructure Behind the Work</h2>
+    <p class="section-desc">SafeCan runs on a purpose-built operations platform — not generic software. Every tool is designed for post-construction cleaning at scale.</p>
+  </div>
+  <div class="tech-grid">
+    <div class="tech-card">
+      <div class="tech-accent red"></div>
+      <div class="tech-body">
+        <div class="tech-tag red">Dispatch + Scheduling</div>
+        <div class="tech-name">Auto-Dispatch Engine</div>
+        <div class="tech-desc">Reads our Google Calendar "Contractors on Site" feed and automatically generates crew briefs, dispatches them via email + SMS, and logs every deployment. Zero manual work per dispatch.</div>
+        <div class="tech-features">
+          <span class="tech-feat red">Auto-Trigger</span>
+          <span class="tech-feat red">24-hr Pre-Brief</span>
+          <span class="tech-feat red">Calendar-Linked</span>
+          <span class="tech-feat red">Job # Tracking</span>
+        </div>
+      </div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-accent blue"></div>
+      <div class="tech-body">
+        <div class="tech-tag blue">Check-In System</div>
+        <div class="tech-name">SafeCan Field Check-In App</div>
+        <div class="tech-desc">A live web app deployed on Google Apps Script — accessible from any phone without installation. Captures GPS, photo, arrival time, and area. Every submission is logged to a live Google Sheet and triggers a supervisor notification.</div>
+        <div class="tech-features">
+          <span class="tech-feat blue">GPS Capture</span>
+          <span class="tech-feat blue">Photo Upload</span>
+          <span class="tech-feat blue">Live Logging</span>
+          <span class="tech-feat blue">15-min Alerts</span>
+        </div>
+      </div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-accent green"></div>
+      <div class="tech-body">
+        <div class="tech-tag green">Live Dashboard</div>
+        <div class="tech-name">Field Operations Monitor</div>
+        <div class="tech-desc">A real-time operations dashboard showing every active job, crew check-in status, floor completion, area progress, and photo feed. Updated live from field submissions. Skygrid can be granted a read-only view at any time.</div>
+        <div class="tech-features">
+          <span class="tech-feat green">Live Crew Status</span>
+          <span class="tech-feat green">Area Completion</span>
+          <span class="tech-feat green">Photo Log</span>
+          <span class="tech-feat green">Client View</span>
+        </div>
+      </div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-accent purple"></div>
+      <div class="tech-body">
+        <div class="tech-tag purple">Reporting + Analytics</div>
+        <div class="tech-name">Ops Command Center</div>
+        <div class="tech-desc">Monthly performance data — jobs completed, crew hours, phase milestones, and QA sign-offs — rolled into a structured dashboard. Skygrid receives a weekly progress summary with zero admin overhead on your end.</div>
+        <div class="tech-features">
+          <span class="tech-feat purple">Weekly Reports</span>
+          <span class="tech-feat purple">Phase Milestones</span>
+          <span class="tech-feat purple">QA Sign-offs</span>
+          <span class="tech-feat purple">Google Drive Sync</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ COMMUNICATION FLOW ══ -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-tag">06 · Communication Protocol</span>
+    <h2 class="section-title">From Calendar to Completion</h2>
+    <p class="section-desc">Every job follows the same automated communication chain — from the moment it's added to the schedule through final sign-off. Nothing falls through the cracks.</p>
+  </div>
+
+  <div class="flow-container">
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-icon red"><span>📅</span><div class="flow-step-num">1</div></div>
+        <div class="flow-step-title">Job Added<br>to Calendar</div>
+        <div class="flow-step-sub">Skygrid confirms floor/phase readiness</div>
+      </div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step">
+        <div class="flow-step-icon blue"><span>⚡</span><div class="flow-step-num">2</div></div>
+        <div class="flow-step-title">Auto-Dispatch<br>Triggered</div>
+        <div class="flow-step-sub">24 hrs prior — crew brief sent via email + SMS</div>
+      </div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step">
+        <div class="flow-step-icon purple"><span>📱</span><div class="flow-step-num">3</div></div>
+        <div class="flow-step-title">Crew<br>Confirms</div>
+        <div class="flow-step-sub">Crew lead acknowledges and reviews brief</div>
+      </div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step">
+        <div class="flow-step-icon green"><span>📍</span><div class="flow-step-num">4</div></div>
+        <div class="flow-step-title">GPS<br>Check-In</div>
+        <div class="flow-step-sub">Live location + photo captured on arrival</div>
+      </div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step">
+        <div class="flow-step-icon yellow"><span>📊</span><div class="flow-step-num">5</div></div>
+        <div class="flow-step-title">Live Monitor<br>Updates</div>
+        <div class="flow-step-sub">Supervisor + client dashboard refreshes in real time</div>
+      </div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step">
+        <div class="flow-step-icon orange"><span>✅</span><div class="flow-step-num">6</div></div>
+        <div class="flow-step-title">Check-Out +<br>Sign-Off</div>
+        <div class="flow-step-sub">Floor completed, photos submitted, QA checklist signed</div>
+      </div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step">
+        <div class="flow-step-icon red"><span>📋</span><div class="flow-step-num">7</div></div>
+        <div class="flow-step-title">Skygrid<br>Notified</div>
+        <div class="flow-step-sub">Completion report delivered within 2 hrs of finish</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:flex-start;gap:14px">
+      <div style="font-size:24px;flex-shrink:0">🔔</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">15-Minute Missed Check-In Alert</div>
+        <div style="font-size:11px;color:var(--dim);line-height:1.5">If a crew member doesn't check in within 15 minutes of their scheduled start, the supervisor is automatically notified by email.</div>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:flex-start;gap:14px">
+      <div style="font-size:24px;flex-shrink:0">📁</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Automatic Drive Folder per Job</div>
+        <div style="font-size:11px;color:var(--dim);line-height:1.5">Every new job automatically creates a named folder in Google Drive — all photos, sign-offs, and logs organized by floor and phase from day one.</div>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:flex-start;gap:14px">
+      <div style="font-size:24px;flex-shrink:0">📧</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Weekly Summary to Skygrid</div>
+        <div style="font-size:11px;color:var(--dim);line-height:1.5">Every Friday, a structured weekly progress summary — floors completed, phases advanced, issues resolved — is delivered to the Skygrid project team.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ QA SECTION ══ -->
+<div class="section">
+  <div class="section-hdr">
+    <span class="section-tag">07 · Quality Assurance</span>
+    <h2 class="section-title">Every Floor. Every Phase. Signed Off.</h2>
+    <p class="section-desc">Our QA model ensures no floor advances to the next phase without documented evidence of completion. This protects Skygrid, the trades, and the handover timeline.</p>
+  </div>
+  <div class="qa-grid">
+    <div class="qa-card">
+      <div class="qa-num text-purple">4</div>
+      <div class="qa-label">Cleaning Phases</div>
+      <div class="qa-desc">Rough → Fine → PDI/Final + Non-Res Final. Each phase has its own checklist and sign-off requirement.</div>
+    </div>
+    <div class="qa-card">
+      <div class="qa-num text-blue">39</div>
+      <div class="qa-label">Levels to Sign Off</div>
+      <div class="qa-desc">Every floor and parking level receives a documented completion record before the next phase begins.</div>
+    </div>
+    <div class="qa-card">
+      <div class="qa-num text-green">100%</div>
+      <div class="qa-label">Photo Documented</div>
+      <div class="qa-desc">Every area cleaned is captured via our check-in app. Photos are timestamped, GPS-tagged, and stored in Google Drive by floor.</div>
+    </div>
+    <div class="qa-card">
+      <div class="qa-num text-red">2 hr</div>
+      <div class="qa-label">Completion Report</div>
+      <div class="qa-desc">Within 2 hours of any floor sign-off, a completion report is automatically sent to the Skygrid project contact.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:40px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px">
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:20px">Phase Progression — Per Floor</div>
+    <div style="display:flex;align-items:center;gap:0;overflow-x:auto;min-width:500px">
+      <div style="background:rgba(156,127,255,.15);border:1px solid rgba(156,127,255,.3);border-radius:8px;padding:14px 18px;text-align:center;flex:1;min-width:120px">
+        <div style="font-size:18px;margin-bottom:6px">🔵</div>
+        <div style="font-size:11px;font-weight:700;color:var(--purple)">Phase 1</div>
+        <div style="font-size:10px;color:var(--dim);margin-top:3px">Rough Clean<br>150 SF/hr</div>
+      </div>
+      <div style="color:var(--faint);font-size:20px;padding:0 8px">→</div>
+      <div style="background:rgba(255,255,255,.04);border:1px dashed var(--border);border-radius:8px;padding:14px 18px;text-align:center;flex:0 0 140px;min-width:120px">
+        <div style="font-size:11px;font-weight:700;color:var(--faint)">QA Sign-Off</div>
+        <div style="font-size:9px;color:var(--faint);margin-top:3px">Photo + checklist<br>submitted</div>
+      </div>
+      <div style="color:var(--faint);font-size:20px;padding:0 8px">→</div>
+      <div style="background:rgba(77,166,255,.15);border:1px solid rgba(77,166,255,.3);border-radius:8px;padding:14px 18px;text-align:center;flex:1;min-width:120px">
+        <div style="font-size:18px;margin-bottom:6px">🔷</div>
+        <div style="font-size:11px;font-weight:700;color:var(--blue)">Phase 2</div>
+        <div style="font-size:10px;color:var(--dim);margin-top:3px">Fine Clean<br>185 SF/hr</div>
+      </div>
+      <div style="color:var(--faint);font-size:20px;padding:0 8px">→</div>
+      <div style="background:rgba(255,255,255,.04);border:1px dashed var(--border);border-radius:8px;padding:14px 18px;text-align:center;flex:0 0 140px;min-width:120px">
+        <div style="font-size:11px;font-weight:700;color:var(--faint)">QA Sign-Off</div>
+        <div style="font-size:9px;color:var(--faint);margin-top:3px">Photo + checklist<br>submitted</div>
+      </div>
+      <div style="color:var(--faint);font-size:20px;padding:0 8px">→</div>
+      <div style="background:rgba(0,200,150,.15);border:1px solid rgba(0,200,150,.3);border-radius:8px;padding:14px 18px;text-align:center;flex:1;min-width:120px">
+        <div style="font-size:18px;margin-bottom:6px">✅</div>
+        <div style="font-size:11px;font-weight:700;color:var(--green)">Phase 3</div>
+        <div style="font-size:10px;color:var(--dim);margin-top:3px">PDI / Final<br>210 SF/hr</div>
+      </div>
+      <div style="color:var(--faint);font-size:20px;padding:0 8px">→</div>
+      <div style="background:rgba(227,6,19,.1);border:1px solid rgba(227,6,19,.3);border-radius:8px;padding:14px 18px;text-align:center;flex:1;min-width:120px">
+        <div style="font-size:18px;margin-bottom:6px">🏁</div>
+        <div style="font-size:11px;font-weight:700;color:var(--red)">Handover</div>
+        <div style="font-size:10px;color:var(--dim);margin-top:3px">Floor cleared<br>for occupancy</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══ FOOTER / CTA ══ -->
+<div class="footer-section">
+  <div class="footer-logo">
+    <div class="sc-logo" style="width:48px;height:48px;font-size:16px">SC</div>
+    <div style="text-align:left">
+      <div style="font-size:18px;font-weight:900;color:var(--text)">SafeCan Inc.</div>
+      <div style="font-size:11px;color:var(--dim)">Post-Construction Cleaning · Commercial Janitorial · GTA</div>
+    </div>
+  </div>
+  <div class="footer-tagline">SafeCan is ready to mobilize on Thirty Merton the moment construction begins handing over floors. Our system is already built. Our crew model is already calibrated. We're ready when you are.</div>
+  <div class="footer-divider"></div>
+  <div class="footer-contact">
+    <div class="footer-contact-item">
+      <div class="footer-contact-label">Director of Operations</div>
+      <div class="footer-contact-val">Kamal Ahmed</div>
+    </div>
+    <div class="footer-contact-item">
+      <div class="footer-contact-label">Phone</div>
+      <div class="footer-contact-val">437-772-5955</div>
+    </div>
+    <div class="footer-contact-item">
+      <div class="footer-contact-label">Email</div>
+      <div class="footer-contact-val">kamal@safecan.ca</div>
+    </div>
+    <div class="footer-contact-item">
+      <div class="footer-contact-label">Website</div>
+      <div class="footer-contact-val">safecan.ca</div>
+    </div>
+    <div class="footer-contact-item">
+      <div class="footer-contact-label">Location</div>
+      <div class="footer-contact-val">77 Hale Rd, Brampton ON</div>
+    </div>
+  </div>
+  <div class="footer-copy">© 2026 SafeCan Inc. · Confidential — Prepared exclusively for <span>Skygrid</span> · Thirty Merton Project</div>
+</div>
+
+<script>
+function animateCounter(el, target, suffix='', duration=1800) {
+  let start = 0, startTime = null;
+  const fmt = n => n >= 1000 ? n.toLocaleString() : n;
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    const p = Math.min((ts - startTime) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmt(Math.floor(ease * target)) + suffix;
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = fmt(target) + suffix;
+  }
+  requestAnimationFrame(step);
+}
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    animateCounter(document.getElementById('cnt-sf'), 389631);
+    animateCounter(document.getElementById('cnt-floors'), 39);
+    animateCounter(document.getElementById('cnt-suites'), 91);
+    animateCounter(document.getElementById('cnt-phases'), 4);
+  }, 400);
+});
+
+let currentPhase = { rate: 150, sf: 233806, name: 'Rough Clean', color: 'red' };
+
+function selectPhase(btn, color, rate, name, sfLabel, sf) {
+  document.querySelectorAll('.phase-btn').forEach(b => b.className = 'phase-btn');
+  btn.className = 'phase-btn active-' + color;
+  currentPhase = { rate, sf, name, color };
+  updateCalc();
+}
+
+function updateCalc() {
+  const crew = parseInt(document.getElementById('crew-slider').value);
+  document.getElementById('crew-display').textContent = crew;
+  const { rate, sf, name } = currentPhase;
+  const sfDay = crew * 8 * rate;
+  const days = Math.ceil(sf / sfDay);
+  const hrs = crew * 8;
+  document.getElementById('res-sfday').textContent = sfDay.toLocaleString();
+  document.getElementById('res-days').textContent = days;
+  document.getElementById('res-hrs').textContent = hrs;
+  document.getElementById('calc-explain').textContent =
+    `${crew} workers × 8 hrs × ${rate} SF/hr = ${sfDay.toLocaleString()} SF/day  ·  ${sf.toLocaleString()} SF ÷ ${sfDay.toLocaleString()} = ${days} days`;
+  updateBars(crew);
+}
+
+function updateBars(crew) {
+  const phases = [
+    { name: 'Phase 1 — Rough Clean', rate: 150, sf: 233806, color: 'var(--purple)', bg: 'rgba(156,127,255,.15)', max: 20160 },
+    { name: 'Phase 2 — Fine Clean', rate: 185, sf: 233806, color: 'var(--blue)', bg: 'rgba(77,166,255,.15)', max: 20160 },
+    { name: 'Phase 3 — PDI / Final', rate: 210, sf: 233806, color: 'var(--green)', bg: 'rgba(0,200,150,.15)', max: 20160 },
+    { name: 'Non-Res Final Clean', rate: 185, sf: 83025, color: 'var(--yellow)', bg: 'rgba(245,166,35,.15)', max: 20160 },
+  ];
+  const container = document.getElementById('prod-bars');
+  container.innerHTML = '';
+  const maxSF = crew * 8 * 210;
+  phases.forEach(ph => {
+    const sfDay = crew * 8 * ph.rate;
+    const pct = Math.min(sfDay / 20160 * 100, 100);
+    const days = Math.ceil(ph.sf / sfDay);
+    container.innerHTML += `
+      <div class="bar-row">
+        <div class="bar-label">${ph.name}</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${pct}%;background:${ph.color};color:rgba(255,255,255,.85)" data-val="${days} days">${sfDay.toLocaleString()} SF/day</div>
+        </div>
+        <div class="bar-crew" style="color:${ph.color}">${days}d</div>
+      </div>`;
+  });
+}
+
+let prodChart;
+function initProdChart() {
+  const ctx = document.getElementById('prod-chart').getContext('2d');
+  const crewSizes = [4, 6, 8, 10, 12, 14, 16, 18, 20];
+  prodChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: crewSizes.map(c => c + ' crew'),
+      datasets: [
+        { label: 'Phase 1 (150 SF/hr)', data: crewSizes.map(c => c*8*150), borderColor: '#9c7fff', backgroundColor: 'rgba(156,127,255,0.1)', tension: 0.4, fill: false, pointRadius: 3, borderWidth: 2 },
+        { label: 'Phase 2 (185 SF/hr)', data: crewSizes.map(c => c*8*185), borderColor: '#4da6ff', backgroundColor: 'rgba(77,166,255,0.1)', tension: 0.4, fill: false, pointRadius: 3, borderWidth: 2 },
+        { label: 'Phase 3 (210 SF/hr)', data: crewSizes.map(c => c*8*210), borderColor: '#00c896', backgroundColor: 'rgba(0,200,150,0.1)', tension: 0.4, fill: false, pointRadius: 3, borderWidth: 2 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { labels: { color: '#8892a4', font: { size: 10, weight: '700' }, boxWidth: 12, padding: 16 } }, tooltip: { backgroundColor: '#13172a', borderColor: 'rgba(255,255,255,.1)', borderWidth: 1, titleColor: '#e8eaf0', bodyColor: '#8892a4', callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()} SF/day` } } },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#4a5268', font: { size: 10 } } },
+        y: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#4a5268', font: { size: 10 }, callback: v => (v/1000).toFixed(0) + 'K SF/d' } }
+      }
+    }
+  });
+}
+
+function buildGantt() {
+  const WEEKS = 16;
+  const W = 100 / WEEKS;
+  const wlContainer = document.getElementById('gantt-week-labels');
+  for (let w = 1; w <= WEEKS; w++) {
+    const d = document.createElement('div');
+    d.style.cssText = `flex:1;text-align:center;font-size:9px;font-weight:700;color:var(--faint);letter-spacing:.5px;white-space:nowrap`;
+    d.textContent = w === 1 ? 'WK 1' : w % 2 === 0 ? `WK ${w}` : '';
+    wlContainer.appendChild(d);
+  }
+  const rows = [
+    { name: 'Podium (L1–L7)', sub: '83,431 SF · 48 suites', bars: [
+      { s:1, e:4, cls:'bar-rough', txt:'Rough Clean' },
+      { s:3, e:6, cls:'bar-fine',  txt:'Fine Clean' },
+      { s:5, e:8, cls:'bar-pdi',   txt:'PDI / Final' },
+    ]},
+    { name: 'Tower Low (L8–L15)', sub: '63,350 SF · 8 flr', bars: [
+      { s:2, e:6, cls:'bar-rough', txt:'Rough Clean' },
+      { s:5, e:8, cls:'bar-fine',  txt:'Fine Clean' },
+      { s:7, e:10, cls:'bar-pdi',  txt:'PDI / Final' },
+    ]},
+    { name: 'Tower Mid (L16–L24)', sub: '90,450 SF · 9 flr', bars: [
+      { s:4, e:8, cls:'bar-rough', txt:'Rough Clean' },
+      { s:7, e:10, cls:'bar-fine', txt:'Fine Clean' },
+      { s:9, e:12, cls:'bar-pdi',  txt:'PDI / Final' },
+    ]},
+    { name: 'Tower High (L25–L32)', sub: '61,300 SF · 8 flr', bars: [
+      { s:6, e:9,  cls:'bar-rough', txt:'Rough Clean' },
+      { s:8, e:11, cls:'bar-fine',  txt:'Fine Clean' },
+      { s:10, e:13, cls:'bar-pdi',  txt:'PDI / Final' },
+    ]},
+    { name: 'Upper (L33–L34)', sub: '14,775 SF · Penthouse', bars: [
+      { s:7, e:9,  cls:'bar-rough', txt:'Rough' },
+      { s:9, e:11, cls:'bar-fine',  txt:'Fine' },
+      { s:11, e:13, cls:'bar-pdi', txt:'PDI' },
+    ]},
+    { name: 'Non-Res + Common', sub: '83,025 SF · All levels', bars: [
+      { s:10, e:14, cls:'bar-nonres', txt:'Non-Res Final Clean' },
+    ]},
+    { name: 'QC + Walkthroughs', sub: 'Final sign-off · Handover', bars: [
+      { s:13, e:16, cls:'bar-qc', txt:'QC & Handover' },
+    ]},
+  ];
+  const container = document.getElementById('gantt-rows');
+  rows.forEach((row, ri) => {
+    const rowEl = document.createElement('div');
+    rowEl.style.cssText = 'display:flex;align-items:center;margin-bottom:12px;min-height:40px';
+    const labelEl = document.createElement('div');
+    labelEl.style.cssText = 'width:190px;flex-shrink:0;padding-right:16px';
+    labelEl.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--text)">${row.name}</div><div style="font-size:9px;color:var(--faint);margin-top:2px">${row.sub}</div>`;
+    const timelineEl = document.createElement('div');
+    timelineEl.style.cssText = 'flex:1;position:relative;height:36px;background:rgba(255,255,255,.02);border-radius:6px;overflow:visible';
+    for (let w = 0; w < WEEKS; w++) {
+      if (w % 2 === 0) {
+        const bg = document.createElement('div');
+        bg.style.cssText = `position:absolute;left:${w*W}%;width:${W}%;top:0;bottom:0;background:rgba(255,255,255,.015);pointer-events:none`;
+        timelineEl.appendChild(bg);
+      }
+    }
+    row.bars.forEach(bar => {
+      const left = ((bar.s - 1) / WEEKS * 100);
+      const width = ((bar.e - bar.s) / WEEKS * 100);
+      const barEl = document.createElement('div');
+      barEl.className = `gantt-bar ${bar.cls}`;
+      barEl.style.cssText = `left:${left}%;width:${width}%;`;
+      barEl.textContent = bar.txt;
+      barEl.title = `${bar.txt}: Week ${bar.s} → Week ${bar.e}`;
+      timelineEl.appendChild(barEl);
+    });
+    rowEl.appendChild(labelEl);
+    rowEl.appendChild(timelineEl);
+    container.appendChild(rowEl);
+  });
+  const milestonesRow = document.createElement('div');
+  milestonesRow.style.cssText = 'display:flex;align-items:center;margin-top:8px;margin-bottom:4px;min-height:28px';
+  const mlLabel = document.createElement('div');
+  mlLabel.style.cssText = 'width:190px;flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint);padding-right:16px';
+  mlLabel.textContent = 'Milestones';
+  const mlTimeline = document.createElement('div');
+  mlTimeline.style.cssText = 'flex:1;position:relative;height:28px';
+  const milestones = [
+    { week: 4, label: '📦 Podium Done', color: 'var(--purple)' },
+    { week: 8, label: '⚡ Midpoint', color: 'var(--yellow)' },
+    { week: 13, label: '🔍 Final QC', color: 'var(--blue)' },
+    { week: 16, label: '🏁 Handover', color: 'var(--red)' },
+  ];
+  milestones.forEach(m => {
+    const ml = document.createElement('div');
+    ml.style.cssText = `position:absolute;left:${((m.week-1)/WEEKS*100)}%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px`;
+    ml.innerHTML = `<div style="width:1px;height:14px;background:${m.color};opacity:.5"></div><div style="font-size:8px;font-weight:700;color:${m.color};white-space:nowrap;letter-spacing:.3px">${m.label}</div>`;
+    mlTimeline.appendChild(ml);
+  });
+  milestonesRow.appendChild(mlLabel);
+  milestonesRow.appendChild(mlTimeline);
+  container.appendChild(milestonesRow);
+}
+
+window.addEventListener('load', () => {
+  initProdChart();
+  buildGantt();
+  updateCalc();
+});
+</script>
+</body>
+</html>
