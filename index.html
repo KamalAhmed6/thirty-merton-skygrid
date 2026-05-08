@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thirty Merton â SafeCan Proposal SC-2026-0507-SKY | Skygrid</title>
+<title>Thirty Merton — SafeCan Proposal SC-2026-0507-SKY | Skygrid</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -313,23 +313,101 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 /* RESPONSIVE */
 @media(max-width:768px){.topbar{padding:0 16px}.section{padding:60px 20px}.wtm-band{padding:50px 20px}.footer-section{padding:40px 20px}.mob-steps{grid-template-columns:1fr}}
 @media(max-width:480px){.hero{padding:40px 20px}.hero-stats{flex-direction:column}.hero-stat{border-right:none;border-bottom:1px solid var(--border)}.hero-stat:last-child{border-bottom:none}}
+
+/* ═══════════════════════════════════════════════════════
+   LIVE PRICING CALCULATOR
+   ═══════════════════════════════════════════════════════ */
+.calc-input{width:58px;background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.3);border-radius:5px;color:#e8eaf0;font-size:12px;font-weight:700;text-align:center;padding:4px 0;outline:none;transition:all .15s;-moz-appearance:textfield;font-family:monospace}
+.calc-input:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(0,200,150,0.15);background:rgba(0,200,150,0.12)}
+.calc-input::-webkit-outer-spin-button,.calc-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.addon-row{display:flex;align-items:center;gap:12px;padding:9px 8px;border-radius:6px;cursor:pointer;transition:background .12s;border-bottom:1px solid rgba(255,255,255,.03)}
+.addon-row:last-child{border-bottom:none}
+.addon-row:hover{background:rgba(255,255,255,0.04)}
+.addon-row.ao-active{background:rgba(156,127,255,0.08)}
+.addon-check{width:15px;height:15px;accent-color:var(--purple);cursor:pointer;flex-shrink:0}
+.scope-row{display:flex;align-items:center;gap:12px;padding:11px 8px;border-radius:6px;cursor:pointer;transition:background .12s,opacity .2s;border-bottom:1px solid rgba(255,255,255,.03)}
+.scope-row:last-child{border-bottom:none}
+.scope-row:hover{background:rgba(255,255,255,0.035)}
+.scope-check{width:15px;height:15px;accent-color:var(--green);cursor:pointer;flex-shrink:0}
+
+/* ═══════════════════════════════════════════════════════
+   PRINT / PDF — Force exact colour reproduction
+   ═══════════════════════════════════════════════════════ */
+@media print {
+  *,*::before,*::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  html, body {
+    background: #0a0d1a !important;
+    color: #e8eaf0 !important;
+    font-size: 12px;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  /* Unstick the topbar so it doesn't repeat on every page */
+  .topbar {
+    position: relative !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background: #0d1020 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+  }
+  /* Keep key cards together */
+  .section, .hero, .kpi-row, .table-wrap,
+  .investment-table, .team-grid, .payment-block,
+  .assumptions-grid, .deploy-card, .tech-card { page-break-inside: avoid; }
+  /* Force dark card backgrounds */
+  .card, .kpi, .hero-stats, .deploy-card,
+  .tech-card, .qa-block, .flow-step,
+  .team-card, .payment-block, .exc-card,
+  .assumption-card, .gantt-wrap, .prod-card,
+  .mob-step, .wtm-card { background: #13172a !important; }
+  /* Hero gradient kept vivid */
+  .hero { min-height: auto !important; padding: 40px 40px 30px !important; }
+  .hero-bg { background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(227,6,19,0.12) 0%, transparent 70%) !important; }
+  /* Don't hide elements in print */
+  .hero-grid { display: none; }
+  /* Investment table */
+  .inv-row, .inv-total { background: #13172a !important; }
+  .inv-total { background: rgba(227,6,19,0.15) !important; }
+  /* Gantt */
+  .gantt-bg { background: rgba(255,255,255,0.02) !important; }
+  /* Phase pills keep colour */
+  .pill-purple { background: rgba(156,127,255,0.2) !important; color: #9c7fff !important; }
+  .pill-blue   { background: rgba(77,166,255,0.2)  !important; color: #4da6ff !important; }
+  .pill-green  { background: rgba(0,200,150,0.2)   !important; color: #00c896 !important; }
+  .pill-yellow { background: rgba(245,166,35,0.2)  !important; color: #f5a623 !important; }
+  .pill-grey   { background: rgba(100,100,120,0.2) !important; color: #8892a4 !important; }
+  /* Interactive controls: hide sliders/buttons in print */
+  .phase-selector, .crew-row, #crew-slider,
+  .calc-labels { display: none !important; }
+  /* Chart canvas print hint */
+  canvas { max-width: 100% !important; }
+  /* Page breaks */
+  .section-title { page-break-after: avoid; }
+  .footer { page-break-before: auto; }
+  /* Margins */
+  @page { margin: 15mm 12mm; }
+}
 </style>
 </head>
 <body>
 
-<!-- ââ TOP BAR ââ -->
+<!-- ══ TOP BAR ══ -->
 <div class="topbar">
   <div class="tb-left">
-    <div class="sc-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 116" style="width:100%;height:100%;display:block"><path d="M50,1 L8,1 C3,1 0,5 0,11 L0,59 C0,87 22,107 50,115 C78,107 100,87 100,59 L100,11 C100,5 97,1 92,1 Z" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><path d="M50,4 L9,4 C5,4 2,8 2,14 L2,59 C2,86 23,105 50,115 Z" fill="#111"/><path d="M50,4 L91,4 C95,4 98,8 98,14 L98,59 C98,86 77,105 50,115 Z" fill="#E30613"/><path d="M50,4 L9,4 C5,4 2,8 2,14 L2,59 C2,86 23,105 50,115 C77,105 98,86 98,59 L98,14 C98,8 95,4 91,4 Z" fill="none" stroke="#000" stroke-width="3.5"/><line x1="50" y1="4" x2="50" y2="115" stroke="#000" stroke-width="1.5"/><path d="M50,13 L47,26 L35,23 L39,34 L22,28 L27,42 L10,51 L27,60 L22,74 L39,68 L36,85 L46,80 L46,98 L54,98 L54,80 L64,85 L61,68 L78,74 L73,60 L90,51 L73,42 L78,28 L61,34 L65,23 L53,26 Z" fill="white" stroke="rgba(0,0,0,0.28)" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+    <div class="sc-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 114" style="width:100%;height:100%;display:block"><path d="M50,3 L11,3 C6,3 3,7 3,13 L3,57 C3,83 23,101 50,112 Z" fill="#1a1a1a"/><path d="M50,3 L89,3 C94,3 97,7 97,13 L97,57 C97,83 77,101 50,112 Z" fill="#E30613"/><path d="M50,3 L11,3 C6,3 3,7 3,13 L3,57 C3,83 23,101 50,112 C77,101 97,83 97,57 L97,13 C97,7 94,3 89,3 Z" fill="none" stroke="#111" stroke-width="4"/><path d="M50,16 L47.5,27 L37,24.5 L41,35 L26,30 L31,42 L15,50 L31,58 L26,70 L41,65 L38,80 L47.5,76.5 L47.5,94 L52.5,94 L52.5,76.5 L62,80 L59,65 L74,70 L69,58 L85,50 L69,42 L74,30 L59,35 L63,24.5 L52.5,27 Z" fill="white"/></svg></div>
     <div>
-      <div class="tb-title">SafeCan Inc. â Cleaning Services Proposal</div>
-      <div class="tb-sub">Thirty Merton Â· Post-Construction Cleaning Â· SC-2026-0507-SKY</div>
+      <div class="tb-title">SafeCan Inc. — Cleaning Services Proposal</div>
+      <div class="tb-sub">Thirty Merton · Post-Construction Cleaning · SC-2026-0507-SKY</div>
     </div>
   </div>
   <div class="tb-right">
     <div class="tb-meta">
       <div class="tb-meta-num">SC-2026-0507-SKY</div>
-      <div class="tb-meta-sub">Issued May 7, 2026 Â· Valid 60 Days</div>
+      <div class="tb-meta-sub">Issued May 7, 2026 · Valid 60 Days</div>
     </div>
     <div class="tb-skygrid">
       <div class="tb-skygrid-logo">SG</div>
@@ -338,14 +416,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   </div>
 </div>
 
-<!-- ââ HERO ââ -->
+<!-- ══ HERO ══ -->
 <div class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">SafeCan Inc. Ã Skygrid Â· Thirty Merton</div>
+    <div class="hero-eyebrow">SafeCan Inc. × Skygrid · Thirty Merton</div>
     <h1 class="hero-title">Thirty Merton,<br>handed over <span class="accent">clean.</span><br>On schedule. Floor by floor.</h1>
-    <p class="hero-sub">Post-construction cleaning is the last thing between your building and occupancy. We make sure it's never the bottleneck. From the first rough clean on Level 3 to the final PDI sign-off on Level 34 â SafeCan is sequenced, staffed, and ready.</p>
+    <p class="hero-sub">Post-construction cleaning is the last thing between your building and occupancy. We make sure it's never the bottleneck. From the first rough clean on Level 3 to the final PDI sign-off on Level 34 — SafeCan is sequenced, staffed, and ready.</p>
     <div class="hero-meta-row">
       <div class="hero-meta-item">Proposal <span class="hero-meta-val" style="margin-left:4px">SC-2026-0507-SKY</span></div>
       <div style="width:1px;height:14px;background:var(--border)"></div>
@@ -353,7 +431,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       <div style="width:1px;height:14px;background:var(--border)"></div>
       <div class="hero-meta-item">Valid <span class="hero-meta-val" style="margin-left:4px">60 Days</span></div>
       <div style="width:1px;height:14px;background:var(--border)"></div>
-      <div class="conf-pill">Confidential Â· Skygrid</div>
+      <div class="conf-pill">Confidential · Skygrid</div>
     </div>
     <div class="hero-stats">
       <div class="hero-stat">
@@ -365,11 +443,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <div class="hero-stat-label">Total Levels</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num green" id="cnt-suites">91</div>
-        <div class="hero-stat-label">Res. Suites</div>
+        <div class="hero-stat-num green" id="cnt-suites">322</div>
+        <div class="hero-stat-label">Res. Units</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num yellow" id="cnt-phases">4</div>
+        <div class="hero-stat-num yellow" id="cnt-phases">3</div>
         <div class="hero-stat-label">Clean Phases</div>
       </div>
     </div>
@@ -379,20 +457,20 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ 01 SCOPE ââ -->
+<!-- ══ 01 SCOPE ══ -->
 <div class="section">
   <div class="section-hdr">
-    <span class="section-tag">01 Â· Project Scope</span>
+    <span class="section-tag">01 · Project Scope</span>
     <h2 class="section-title">What we're cleaning at Thirty Merton</h2>
-    <p class="section-desc">Every square foot accounted for â residential suites, commercial space, amenity levels, and common areas across all 39 levels. This is the full picture of what SafeCan takes on, and exactly how we break it down.</p>
+    <p class="section-desc">Every square foot accounted for — residential suites, commercial space, amenity levels, and common areas across all 39 levels. This is the full picture of what SafeCan takes on, and exactly how we break it down.</p>
   </div>
   <div class="kpi-grid">
-    <div class="kpi red"><div class="kpi-label">Cleanable SF <span class="kpi-icon">ð</span></div><div class="kpi-num">316,831</div><div class="kpi-sub">Res. + Non-Res (excl. parking)</div></div>
-    <div class="kpi blue"><div class="kpi-label">Residential SF <span class="kpi-icon">ð </span></div><div class="kpi-num">233,806</div><div class="kpi-sub">91 suites Â· 3 clean phases</div></div>
-    <div class="kpi purple"><div class="kpi-label">Non-Res SF <span class="kpi-icon">ð¢</span></div><div class="kpi-num">83,025</div><div class="kpi-sub">Common B· Amenity Â· Retail Â· Comm.</div></div>
-    <div class="kpi green"><div class="kpi-label">Total Levels <span class="kpi-icon">ðï¸</span></div><div class="kpi-num">39</div><div class="kpi-sub">P1âP4 + L1âL35 incl. roof</div></div>
-    <div class="kpi yellow"><div class="kpi-label">Labour Hours <span class="kpi-icon">â±</span></div><div class="kpi-num">4,385</div><div class="kpi-sub">Total across all phases</div></div>
-    <div class="kpi orange"><div class="kpi-label">Clean Phases <span class="kpi-icon">â</span></div><div class="kpi-num">4</div><div class="kpi-sub">Rough Â· Fine Â· PDI Â· Non-Res Final</div></div>
+    <div class="kpi red"><div class="kpi-label">Cleanable SF <span class="kpi-icon">📐</span></div><div class="kpi-num">316,831</div><div class="kpi-sub">Res. + Non-Res (excl. parking)</div></div>
+    <div class="kpi blue"><div class="kpi-label">Residential SF <span class="kpi-icon">🏠</span></div><div class="kpi-num">233,806</div><div class="kpi-sub">322 suites · 3 clean cycles</div></div>
+    <div class="kpi purple"><div class="kpi-label">Non-Res SF <span class="kpi-icon">🏢</span></div><div class="kpi-num">83,025</div><div class="kpi-sub">Common · Amenity · Retail · Comm.</div></div>
+    <div class="kpi green"><div class="kpi-label">Total Levels <span class="kpi-icon">🏗️</span></div><div class="kpi-num">39</div><div class="kpi-sub">P1–P4 + L1–L35 incl. roof</div></div>
+    <div class="kpi yellow"><div class="kpi-label">Labour Hours <span class="kpi-icon">⏱</span></div><div class="kpi-num">4,385</div><div class="kpi-sub">Total across all phases</div></div>
+    <div class="kpi orange"><div class="kpi-label">Suite Clean Cycles <span class="kpi-icon">✅</span></div><div class="kpi-num">3</div><div class="kpi-sub">Construction · Pre-PDI/PDI · Final</div></div>
   </div>
   <div class="floor-table-wrap mt-40">
     <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
@@ -407,14 +485,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     <table class="floor-table">
       <thead><tr><th>Level</th><th>Description</th><th>Res. Suites</th><th>Total SF</th><th>SF Distribution</th><th>Phase(s)</th></tr></thead>
       <tbody>
-        <tr><td class="mono">P1âP4</td><td class="dim">Parking Levels</td><td class="dim">â</td><td>82,450</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:21%;background:var(--faint)"></div></div><span style="font-size:10px;color:var(--faint)">21%</span></div></td><td><span class="phase-pill pill-grey">Outsourced</span></td></tr>
-        <tr><td class="mono">L1âMez</td><td class="dim">Podium Base + Lobby</td><td class="dim">â</td><td>8,475</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:3%;background:var(--yellow)"></div></div><span style="font-size:10px;color:var(--dim)">3%</span></div></td><td><span class="phase-pill pill-yellow">Non-Res Final</span></td></tr>
-        <tr><td class="mono">L2</td><td class="dim">Commercial + Admin</td><td class="dim">â</td><td>13,550</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:4%;background:var(--yellow)"></div></div><span style="font-size:10px;color:var(--dim)">4%</span></div></td><td><span class="phase-pill pill-yellow">Non-Res Final</span></td></tr>
-        <tr><td class="mono">L3âL7</td><td class="dim">Podium Residential</td><td>48 suites</td><td>69,956</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:18%;background:var(--purple)"></div></div><span style="font-size:10px;color:var(--dim)">18%</span></div></td><td><span class="phase-pill pill-purple">Rough</span> <span class="phase-pill pill-blue">Fine</span> <span class="phase-pill pill-green">PDI</span></td></tr>
-        <tr><td class="mono">L8âL32</td><td class="dim">Main Tower (25 floors)</td><td>10 / floor</td><td>197,250</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:51%;background:var(--blue)"></div></div><span style="font-size:10px;color:var(--blue)">51%</span></div></td><td><span class="phase-pill pill-purple">Rough</span> <span class="phase-pill pill-blue">Fine</span> <span class="phase-pill pill-green">PDI</span></td></tr>
-        <tr><td class="mono">L33âL34</td><td class="dim">Upper Tower / Penthouse</td><td>16 suites</td><td>14,775</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:4%;background:var(--blue)"></div></div><span style="font-size:10px;color:var(--dim)">4%</span></div></td><td><span class="phase-pill pill-purple">Rough</span> <span class="phase-pill pill-blue">Fine</span> <span class="phase-pill pill-green">PDI</span></td></tr>
-        <tr><td class="mono">L35</td><td class="dim">Roof / Mechanical</td><td class="dim">â</td><td>3,000</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:1%;background:var(--faint)"></div></div><span style="font-size:10px;color:var(--faint)">1%</span></div></td><td><span class="phase-pill pill-yellow">Non-Res Final</span></td></tr>
-        <tr style="font-weight:700"><td class="mono text-red">TOTAL</td><td>All Levels</td><td class="text-green">91 suites</td><td class="text-red">389,631 SF</td><td></td><td></td></tr>
+        <tr><td class="mono">P1–P4</td><td class="dim">Parking Levels</td><td class="dim">—</td><td>82,450</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:21%;background:var(--faint)"></div></div><span style="font-size:10px;color:var(--faint)">21%</span></div></td><td><span class="phase-pill pill-grey">Outsourced</span></td></tr>
+        <tr><td class="mono">L1–Mez</td><td class="dim">Podium Base + Lobby</td><td class="dim">—</td><td>8,475</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:3%;background:var(--yellow)"></div></div><span style="font-size:10px;color:var(--dim)">3%</span></div></td><td><span class="phase-pill pill-yellow">Non-Res Final</span></td></tr>
+        <tr><td class="mono">L2</td><td class="dim">Commercial + Admin</td><td class="dim">—</td><td>13,550</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:4%;background:var(--yellow)"></div></div><span style="font-size:10px;color:var(--dim)">4%</span></div></td><td><span class="phase-pill pill-yellow">Non-Res Final</span></td></tr>
+        <tr><td class="mono">L3–L7</td><td class="dim">Podium Residential</td><td>48 suites</td><td>69,956</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:18%;background:var(--purple)"></div></div><span style="font-size:10px;color:var(--dim)">18%</span></div></td><td><span class="phase-pill pill-purple">Rough</span> <span class="phase-pill pill-blue">Fine</span> <span class="phase-pill pill-green">PDI</span></td></tr>
+        <tr><td class="mono">L8–L32</td><td class="dim">Main Tower (25 floors)</td><td>10 / floor</td><td>197,250</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:51%;background:var(--blue)"></div></div><span style="font-size:10px;color:var(--blue)">51%</span></div></td><td><span class="phase-pill pill-purple">Rough</span> <span class="phase-pill pill-blue">Fine</span> <span class="phase-pill pill-green">PDI</span></td></tr>
+        <tr><td class="mono">L33–L34</td><td class="dim">Upper Tower / Penthouse</td><td>16 suites</td><td>14,775</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:4%;background:var(--blue)"></div></div><span style="font-size:10px;color:var(--dim)">4%</span></div></td><td><span class="phase-pill pill-purple">Rough</span> <span class="phase-pill pill-blue">Fine</span> <span class="phase-pill pill-green">PDI</span></td></tr>
+        <tr><td class="mono">L35</td><td class="dim">Roof / Mechanical</td><td class="dim">—</td><td>3,000</td><td><div class="mini-bar"><div class="mini-track"><div class="mini-fill" style="width:1%;background:var(--faint)"></div></div><span style="font-size:10px;color:var(--faint)">1%</span></div></td><td><span class="phase-pill pill-yellow">Non-Res Final</span></td></tr>
+        <tr style="font-weight:700"><td class="mono text-red">TOTAL</td><td>All Levels</td><td class="text-green">322 units</td><td class="text-red">389,631 SF</td><td></td><td></td></tr>
       </tbody>
     </table>
   </div>
@@ -422,32 +500,32 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ WHY THIS MATTERS TO SKYGRID ââ -->
+<!-- ══ WHY THIS MATTERS TO SKYGRID ══ -->
 <div class="wtm-band">
   <div class="wtm-inner">
     <div>
       <div class="wtm-eyebrow">Why This Matters</div>
       <h2 class="wtm-title">The cleaning contractor you choose affects more than cleanliness.</h2>
-      <p class="wtm-body">A missed PDI, a delayed floor sign-off, or a crew that doesn't show â these aren't just cleaning problems. They hold up trades, push back occupancy dates, and put your project timeline at risk. SafeCan is built specifically to prevent that.</p>
+      <p class="wtm-body">A missed PDI, a delayed floor sign-off, or a crew that doesn't show — these aren't just cleaning problems. They hold up trades, push back occupancy dates, and put your project timeline at risk. SafeCan is built specifically to prevent that.</p>
       <p class="wtm-body">We operate on the same floor-by-floor logic that your construction team uses. We sequence with your GC, we report in real time, and we don't need to be chased. When a floor is ready, we're already on it.</p>
     </div>
     <div class="wtm-points">
       <div class="wtm-point">
-        <div class="wtm-point-icon">ð</div>
+        <div class="wtm-point-icon">📅</div>
         <div>
           <div class="wtm-point-title">PDI delays are expensive</div>
           <div class="wtm-point-desc">Every day a suite isn't PDI-ready pushes purchaser walkthroughs and extends your carrying costs. Our floor-by-floor sequencing keeps PDI on schedule even when construction doesn't hand over all at once.</div>
         </div>
       </div>
       <div class="wtm-point">
-        <div class="wtm-point-icon">ðï¸</div>
+        <div class="wtm-point-icon">👁️</div>
         <div>
           <div class="wtm-point-title">You'll know what's happening without asking</div>
           <div class="wtm-point-desc">Live dashboard access, weekly progress reports, and 2-hour completion reports mean Skygrid's project team is never in the dark. No chasing, no guessing.</div>
         </div>
       </div>
       <div class="wtm-point">
-        <div class="wtm-point-icon">ð¡ï¸</div>
+        <div class="wtm-point-icon">🛡️</div>
         <div>
           <div class="wtm-point-title">Your brand is on the line at handover</div>
           <div class="wtm-point-desc">Purchaser first impressions happen at PDI. A perfectly clean suite signals quality and attention to detail across the entire project. SafeCan's QA sign-off process ensures every suite meets the standard before your team walks in.</div>
@@ -459,27 +537,27 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ 02 PRODUCTIVITY ââ -->
+<!-- ══ 02 PRODUCTIVITY ══ -->
 <div class="section">
   <div class="section-hdr">
-    <span class="section-tag">02 Â· Productivity Matrix</span>
+    <span class="section-tag">02 · Productivity Matrix</span>
     <h2 class="section-title">How fast we move (and why it matters)</h2>
-    <p class="section-desc">Our productivity rates aren't estimates â they're measured from comparable high-rise projects across the GTA. Adjust crew size below to model exactly how many days each phase takes at Thirty Merton, and what that means for your handover timeline.</p>
+    <p class="section-desc">Our productivity rates aren't estimates — they're measured from comparable high-rise projects across the GTA. Adjust crew size below to model exactly how many days each phase takes at Thirty Merton, and what that means for your handover timeline.</p>
   </div>
   <div class="prod-container">
     <div class="prod-controls">
       <div class="prod-title-sm">Interactive Calculator</div>
       <div class="slider-group">
         <div class="slider-label">Crew Size <span><span class="slider-val" id="crew-display">8</span> <span class="slider-unit">workers</span></span></div>
-        <input type="range" min="4" max="20" value="8" id="crew-slider" oninput="updateCalc()">
-        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--faint);margin-top:4px"><span>4 min</span><span>12 optimal</span><span>20 max</span></div>
+        <input type="range" min="3" max="20" value="8" id="crew-slider" oninput="updateCalc()">
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--faint);margin-top:4px"><span>3 min</span><span>12 optimal</span><span>20 max</span></div>
       </div>
       <div class="prod-title-sm" style="margin-bottom:12px">Select Phase</div>
       <div class="phase-selector">
-        <div class="phase-btn active-purple" onclick="selectPhase(this,'purple',150,'Rough Clean','Residential SF',233806)">ðµ Phase 1<br>Rough Clean<br><span style="font-size:9px;font-weight:400">150 SF/hr</span></div>
-        <div class="phase-btn" onclick="selectPhase(this,'blue',185,'Fine Clean','Residential SF',233806)">ð· Phase 2<br>Fine Clean<br><span style="font-size:9px;font-weight:400">185 SF/hr</span></div>
-        <div class="phase-btn" onclick="selectPhase(this,'green',210,'PDI / Final','Residential SF',233806)">â Phase 3<br>PDI / Final<br><span style="font-size:9px;font-weight:400">210 SF/hr</span></div>
-        <div class="phase-btn" onclick="selectPhase(this,'yellow',185,'Non-Res Final','Non-Res SF',83025)">ð¢ Non-Res<br>Final Clean<br><span style="font-size:9px;font-weight:400">185 SF/hr</span></div>
+        <div class="phase-btn active-purple" onclick="selectPhase(this,'purple',150,'Rough Clean','Residential SF',233806,'bar-rough')">🔵 Phase 1<br>Rough Clean</div>
+        <div class="phase-btn" onclick="selectPhase(this,'blue',185,'Fine Clean','Residential SF',233806,'bar-fine')">🔷 Phase 2<br>Fine Clean</div>
+        <div class="phase-btn" onclick="selectPhase(this,'green',210,'PDI / Final','Residential SF',233806,'bar-pdi')">✅ Phase 3<br>PDI / Final</div>
+        <div class="phase-btn" onclick="selectPhase(this,'yellow',185,'Non-Res Final','Non-Res SF',83025,'bar-nonres')">🏢 Non-Res<br>Final Clean</div>
       </div>
       <div class="prod-result-row">
         <div class="prod-result"><div class="prod-result-num text-red" id="res-sfday">9,600</div><div class="prod-result-lbl">SF / Day</div></div>
@@ -487,11 +565,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <div class="prod-result"><div class="prod-result-num text-blue" id="res-hrs">64</div><div class="prod-result-lbl">Hrs / Day</div></div>
       </div>
       <div style="margin-top:12px;padding:10px 14px;background:rgba(255,255,255,.03);border-radius:6px;font-size:10px;color:var(--dim);line-height:1.6">
-        <span id="calc-explain">8 workers Ã 8 hrs Ã 150 SF/hr = 9,600 SF/day Â· 233,806 SF Ã· 9,600 = 24 days</span>
+        <span id="calc-explain">8 workers · 9,600 SF/day · 233,806 SF = 24 working days</span>
       </div>
     </div>
     <div class="prod-chart-card">
-      <div class="prod-title-sm" style="margin-bottom:20px">Daily Output Capacity â All Crew Configurations</div>
+      <div class="prod-title-sm" style="margin-bottom:20px">Daily Output Capacity — All Crew Configurations</div>
       <div class="prod-bars" id="prod-bars"></div>
       <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
         <canvas id="prod-chart" height="180"></canvas>
@@ -502,18 +580,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ 03 SCHEDULE MATRIX ââ -->
+<!-- ══ 03 SCHEDULE MATRIX ══ -->
 <div class="section">
   <div class="section-hdr">
-    <span class="section-tag">03 Â· Schedule Matrix</span>
+    <span class="section-tag">03 · Schedule Matrix</span>
     <h2 class="section-title">Your 16-week path to handover</h2>
-    <p class="section-desc">We don't wait for full-building turnover. The moment the first floors are ready, SafeCan is sequencing crews from the podium up â running up to 3 phases concurrently and compressing the overall timeline by weeks. This is how 39 levels get handed over clean in 16 weeks.</p>
+    <p class="section-desc">We don't wait for full-building turnover. The moment the first floors are ready, SafeCan is sequencing crews from the podium up — running up to 3 phases concurrently and compressing the overall timeline by weeks. This is how 39 levels get handed over clean in 16 weeks.</p>
   </div>
   <div class="gantt-wrap">
     <div class="gantt-hdr">
       <div>
-        <div class="gantt-hdr-title">Thirty Merton â 16-Week Rolling Schedule</div>
-        <div style="font-size:10px;color:var(--faint);margin-top:3px">Based on 8-crew standard deployment Â· Assumes construction handover by Week 1</div>
+        <div class="gantt-hdr-title">Thirty Merton — 16-Week Rolling Schedule</div>
+        <div style="font-size:10px;color:var(--faint);margin-top:3px">Timeline recalculates live with crew slider above · Assumes construction handover by Week 1</div>
       </div>
       <div class="gantt-legend">
         <div class="gantt-leg-item"><div class="gantt-leg-dot" style="background:var(--purple)"></div>Rough Clean</div>
@@ -528,10 +606,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <div id="gantt-week-labels" style="display:flex;gap:0;width:100%"></div>
       </div>
       <div id="gantt-rows" style="margin-top:12px;position:relative"></div>
-      <div style="margin-top:16px;padding:14px 18px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;display:flex;gap:24px;flex-wrap:wrap">
+      <div id="gantt-summary" style="margin-top:16px;padding:14px 18px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;display:flex;gap:24px;flex-wrap:wrap">
         <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Total Duration</span><br><span style="font-size:16px;font-weight:900;color:var(--text)">16 Weeks</span></div>
         <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Phases Running Concurrently</span><br><span style="font-size:16px;font-weight:900;color:var(--blue)">Up to 3</span></div>
-        <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Peak Week Crew Count</span><br><span style="font-size:16px;font-weight:900;color:var(--green)">16â20 workers</span></div>
+        <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Peak Week Crew Count</span><br><span style="font-size:16px;font-weight:900;color:var(--green)">16–20 workers</span></div>
         <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Phase Sign-offs</span><br><span style="font-size:16px;font-weight:900;color:var(--yellow)">Per Floor</span></div>
         <div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Handover Target</span><br><span style="font-size:16px;font-weight:900;color:var(--red)">Week 16</span></div>
       </div>
@@ -541,12 +619,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ MOBILIZATION & ONBOARDING ââ -->
+<!-- ══ MOBILIZATION & ONBOARDING ══ -->
 <div class="section">
   <div class="section-hdr">
     <span class="section-tag">Mobilization & Onboarding</span>
     <h2 class="section-title">How we go from award to on-site in 5 steps</h2>
-    <p class="section-desc">From contract signing to first crew on-site â SafeCan's mobilization process is designed to be fast, transparent, and zero-friction for Skygrid's project team.</p>
+    <p class="section-desc">From contract signing to first crew on-site — SafeCan's mobilization process is designed to be fast, transparent, and zero-friction for Skygrid's project team.</p>
   </div>
   <div class="mob-steps">
     <div class="mob-step">
@@ -557,7 +635,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     </div>
     <div class="mob-step">
       <div class="mob-step-num">02</div>
-      <div class="mob-step-tag">Week 0â1</div>
+      <div class="mob-step-tag">Week 0–1</div>
       <div class="mob-step-title">Site Walk & Scope Confirmation</div>
       <div class="mob-step-desc">SafeCan conducts a full site walk with the GC to confirm floor sequencing, access protocols, elevator schedule, and any site-specific constraints. Scope is locked and shared back to Skygrid in writing within 24 hours.</div>
     </div>
@@ -565,7 +643,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       <div class="mob-step-num">03</div>
       <div class="mob-step-tag">Week 1</div>
       <div class="mob-step-title">Crew Assignment & Briefing</div>
-      <div class="mob-step-desc">Crew leads are assigned to Thirty Merton. Full project briefing is conducted â including scope, floor sequences, QA requirements, SafeCan check-in protocol, and site rules. All crew are cleared for site access.</div>
+      <div class="mob-step-desc">Crew leads are assigned to Thirty Merton. Full project briefing is conducted — including scope, floor sequences, QA requirements, SafeCan check-in protocol, and site rules. All crew are cleared for site access.</div>
     </div>
     <div class="mob-step">
       <div class="mob-step-num">04</div>
@@ -584,18 +662,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ 04 CREW DEPLOYMENT ââ -->
+<!-- ══ 04 CREW DEPLOYMENT ══ -->
 <div class="section">
   <div class="section-hdr">
-    <span class="section-tag">04 Â· Crew Deployment Model</span>
-    <h2 class="section-title">The crew that shows up â and how we keep them accountable</h2>
+    <span class="section-tag">04 · Crew Deployment Model</span>
+    <h2 class="section-title">The crew that shows up — and how we keep them accountable</h2>
     <p class="section-desc">Reliability is the hardest thing to deliver in post-construction cleaning. SafeCan solves it with a system, not a promise. Every deployment is tracked, every check-in is verified, and every floor is signed off before the next phase starts.</p>
   </div>
   <div class="deploy-grid">
     <div class="deploy-card red">
-      <div class="deploy-icon">ð¯</div>
+      <div class="deploy-icon">🎯</div>
       <div class="deploy-card-title">Dispatch Protocol</div>
-      <div class="deploy-card-sub">Every crew is dispatched through our automated system â 24 hours before mobilization. Crew leads receive a full brief with job number, floor assignment, phase, supervisor contact, and check-in link.</div>
+      <div class="deploy-card-sub">Every crew is dispatched through our automated system — 24 hours before mobilization. Crew leads receive a full brief with job number, floor assignment, phase, supervisor contact, and check-in link.</div>
       <div class="deploy-items">
         <div class="deploy-item red">Auto-dispatch 24 hrs prior</div>
         <div class="deploy-item red">Job # + floor assignment in brief</div>
@@ -604,9 +682,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       </div>
     </div>
     <div class="deploy-card blue">
-      <div class="deploy-icon">ð</div>
-      <div class="deplot-card-title">GPS Check-In / Check-Out</div>
-      <div class="deploy-card-sub">Every crew member checks in on arrival via our live web app â capturing GPS location, timestamp, and photo documentation. Missed check-ins trigger an automated alert within 15 minutes.</div>
+      <div class="deploy-icon">📍</div>
+      <div class="deploy-card-title">GPS Check-In / Check-Out</div>
+      <div class="deploy-card-sub">Every crew member checks in on arrival via our live web app — capturing GPS location, timestamp, and photo documentation. Missed check-ins trigger an automated alert within 15 minutes.</div>
       <div class="deploy-items">
         <div class="deploy-item blue">GPS-stamped arrival + departure</div>
         <div class="deploy-item blue">Photo upload per area completed</div>
@@ -615,9 +693,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       </div>
     </div>
     <div class="deploy-card green">
-      <div class="deploy-icon">ð</div>
+      <div class="deploy-icon">📊</div>
       <div class="deploy-card-title">Live Operations Monitor</div>
-      <div class="deploy-card-sub">Skygrid gets access to our Field Operations Monitor â a live dashboard showing every active crew, floor status, phase progress, and area completion across the entire project in real time.</div>
+      <div class="deploy-card-sub">Skygrid gets access to our Field Operations Monitor — a live dashboard showing every active crew, floor status, phase progress, and area completion across the entire project in real time.</div>
       <div class="deploy-items">
         <div class="deploy-item green">Live crew tracking per floor</div>
         <div class="deploy-item green">Phase completion % by area</div>
@@ -626,9 +704,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       </div>
     </div>
     <div class="deploy-card purple">
-      <div class="deploy-icon">ð</div>
+      <div class="deploy-icon">📅</div>
       <div class="deploy-card-title">Rolling Floor Sequencing</div>
-      <div class="deploy-card-sub">Rather than waiting for full-building handover, SafeCan sequences crews floor by floor as construction turns over â maximizing productivity and compressing the overall timeline.</div>
+      <div class="deploy-card-sub">Rather than waiting for full-building handover, SafeCan sequences crews floor by floor as construction turns over — maximizing productivity and compressing the overall timeline.</div>
       <div class="deploy-items">
         <div class="deploy-item purple">Starts at podium as floors clear</div>
         <div class="deploy-item purple">3 phase streams run concurrently</div>
@@ -637,7 +715,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       </div>
     </div>
     <div class="deploy-card yellow">
-      <div class="deploy-icon">â¡</div>
+      <div class="deploy-icon">⚡</div>
       <div class="deploy-card-title">Scalable Crew Model</div>
       <div class="deploy-card-sub">Our crew model scales from a minimum of 6 workers to a peak of 20 depending on phase overlap and construction handover pace. Surge capacity can be activated within 48 hours.</div>
       <div class="deploy-items">
@@ -648,7 +726,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       </div>
     </div>
     <div class="deploy-card orange">
-      <div class="deploy-icon">ð¡ï¸</div>
+      <div class="deploy-icon">🛡️</div>
       <div class="deploy-card-title">Quality Assurance</div>
       <div class="deploy-card-sub">Every floor is signed off before the next phase begins. Our QA checklist is completed digitally, with photographic evidence, and a floor-level sign-off submitted to Skygrid before PDI.</div>
       <div class="deploy-items">
@@ -663,12 +741,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ 05 TECH STACK ââ -->
+<!-- ══ 05 TECH STACK ══ -->
 <div class="section">
   <div class="section-hdr">
-    <span class="section-tag">05 Â· Technology Stack</span>
+    <span class="section-tag">05 · Technology Stack</span>
     <h2 class="section-title">Live visibility into your project</h2>
-    <p class="section-desc">Most cleaning companies send a crew and hope for the best. SafeCan runs on a purpose-built operations platform that gives Skygrid real-time visibility into every floor, every crew, every phase â without any admin overhead on your end.</p>
+    <p class="section-desc">Most cleaning companies send a crew and hope for the best. SafeCan runs on a purpose-built operations platform that gives Skygrid real-time visibility into every floor, every crew, every phase — without any admin overhead on your end.</p>
   </div>
   <div class="tech-grid">
     <div class="tech-card">
@@ -687,9 +765,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       <div class="tech-body">
         <div class="tech-tag blue">Check-In System</div>
         <div class="tech-name">SafeCan Field Check-In App</div>
-        <div class="tech-desc">A live web app accessible from any phone â no installation required. Captures GPS, photo, arrival time, and area per worker. Every submission triggers a supervisor notification and logs to the live dashboard.</div>
+        <div class="tech-desc">A live web app accessible from any phone — no installation required. Captures GPS, photo, arrival time, and area per worker. Every submission triggers a supervisor notification and logs to the live dashboard.</div>
         <div class="tech-features">
-          <span class="tech-feat blue">GPS Capture</span><span class="tech-feat blue">Photo Upload</span><span class="tech-feat blue">Live Logging</span><span class="tech-feat blue">15-min Alerts</spam>
+          <span class="tech-feat blue">GPS Capture</span><span class="tech-feat blue">Photo Upload</span><span class="tech-feat blue">Live Logging</span><span class="tech-feat blue">15-min Alerts</span>
         </div>
       </div>
     </div>
@@ -698,7 +776,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       <div class="tech-body">
         <div class="tech-tag green">Live Dashboard</div>
         <div class="tech-name">Field Operations Monitor</div>
-        <div class="tech-desc">A real-time dashboard showing every active job, crew check-in status, floor completion, and photo feed. Updated live from field submissions. Skygrid can be granted a read-only view at any time â no login required.</div>
+        <div class="tech-desc">A real-time dashboard showing every active job, crew check-in status, floor completion, and photo feed. Updated live from field submissions. Skygrid can be granted a read-only view at any time — no login required.</div>
         <div class="tech-features">
           <span class="tech-feat green">Live Crew Status</span><span class="tech-feat green">Area Completion</span><span class="tech-feat green">Photo Log</span><span class="tech-feat green">Client View</span>
         </div>
@@ -709,7 +787,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       <div class="tech-body">
         <div class="tech-tag purple">Reporting + Analytics</div>
         <div class="tech-name">Ops Command Center</div>
-        <div class="tech-desc">Weekly progress summaries â jobs completed, crew hours, phase milestones, QA sign-offs â delivered to Skygrid every Friday. All documentation stored in a shared Google Drive folder organized by floor and phase.</div>
+        <div class="tech-desc">Weekly progress summaries — jobs completed, crew hours, phase milestones, QA sign-offs — delivered to Skygrid every Friday. All documentation stored in a shared Google Drive folder organized by floor and phase.</div>
         <div class="tech-features">
           <span class="tech-feat purple">Weekly Reports</span><span class="tech-feat purple">Phase Milestones</span><span class="tech-feat purple">QA Sign-offs</span><span class="tech-feat purple">Google Drive Sync</span>
         </div>
@@ -720,53 +798,53 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ 06 COMMUNICATION ââ -->
+<!-- ══ 06 COMMUNICATION ══ -->
 <div class="section">
   <div class="section-hdr">
-    <span class="section-tag">06 Â· Communication Protocol</span>
+    <span class="section-tag">06 · Communication Protocol</span>
     <h2 class="section-title">What you'll hear from us, and when</h2>
-    <p class="section-desc">Every job follows the same automated communication chain â from the moment it's scheduled through final floor sign-off. Skygrid's project team is informed at every step without having to ask. Nothing falls through the cracks.</p>
+    <p class="section-desc">Every job follows the same automated communication chain — from the moment it's scheduled through final floor sign-off. Skygrid's project team is informed at every step without having to ask. Nothing falls through the cracks.</p>
   </div>
   <div class="flow-container">
     <div class="flow-steps">
       <div class="flow-step">
-        <div class="flow-step-icon red"><span>ð</span><div class="flow-step-num">1</div></div>
+        <div class="flow-step-icon red"><span>📅</span><div class="flow-step-num">1</div></div>
         <div class="flow-step-title">Job Added<br>to Calendar</div>
         <div class="flow-step-sub">Skygrid confirms floor/phase readiness</div>
       </div>
       <div class="flow-arrow"></div>
       <div class="flow-step">
-        <div class="flow-step-icon blue"><span>â¡</span><div class="flow-step-num">2</div></div>
+        <div class="flow-step-icon blue"><span>⚡</span><div class="flow-step-num">2</div></div>
         <div class="flow-step-title">Auto-Dispatch<br>Triggered</div>
-        <div class="flow-step-sub">24 hrs prior â crew brief sent via email + SMS</div>
+        <div class="flow-step-sub">24 hrs prior — crew brief sent via email + SMS</div>
       </div>
       <div class="flow-arrow"></div>
       <div class="flow-step">
-        <div class="flow-step-icon purple"><span>ð±</span><div class="flow-step-num">3</div></div>
+        <div class="flow-step-icon purple"><span>📱</span><div class="flow-step-num">3</div></div>
         <div class="flow-step-title">Crew<br>Confirms</div>
         <div class="flow-step-sub">Crew lead acknowledges and reviews brief</div>
       </div>
       <div class="flow-arrow"></div>
       <div class="flow-step">
-        <div class="flow-step-icon green"><span>ð</span><div class="flow-step-num">4</div></div>
+        <div class="flow-step-icon green"><span>📍</span><div class="flow-step-num">4</div></div>
         <div class="flow-step-title">GPS<br>Check-In</div>
         <div class="flow-step-sub">Live location + photo captured on arrival</div>
       </div>
       <div class="flow-arrow"></div>
       <div class="flow-step">
-        <div class="flow-step-icon yellow"><span>ð</span><div class="flow-step-num">5</div></div>
+        <div class="flow-step-icon yellow"><span>📊</span><div class="flow-step-num">5</div></div>
         <div class="flow-step-title">Live Monitor<br>Updates</div>
         <div class="flow-step-sub">Supervisor + client dashboard refreshes in real time</div>
       </div>
       <div class="flow-arrow"></div>
       <div class="flow-step">
-        <div class="flow-step-icon orange"><span>â</span><div class="flow-step-num">6</div></div>
+        <div class="flow-step-icon orange"><span>✅</span><div class="flow-step-num">6</div></div>
         <div class="flow-step-title">Check-Out +<br>Sign-Off</div>
         <div class="flow-step-sub">Floor completed, photos submitted, QA checklist signed</div>
       </div>
       <div class="flow-arrow"></div>
       <div class="flow-step">
-        <div class="flow-step-icon red"><span>ð</span><div class="flow-step-num">7</div></div>
+        <div class="flow-step-icon red"><span>📋</span><div class="flow-step-num">7</div></div>
         <div class="flow-step-title">Skygrid<br>Notified</div>
         <div class="flow-step-sub">Completion report delivered within 2 hrs of finish</div>
       </div>
@@ -774,24 +852,24 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   </div>
   <div style="margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
     <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:flex-start;gap:14px">
-      <div style="font-size:24px;flex-shrink:0">ð</div>
+      <div style="font-size:24px;flex-shrink:0">🔔</div>
       <div>
         <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">15-Minute Missed Check-In Alert</div>
         <div style="font-size:11px;color:var(--dim);line-height:1.5">If a crew member doesn't check in within 15 minutes of their scheduled start, the supervisor is automatically notified by email.</div>
       </div>
     </div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:flex-start;gap:14px">
-      <div style="font-size:24px;flex-shrink:0">ð</div>
+      <div style="font-size:24px;flex-shrink:0">📁</div>
       <div>
         <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Automatic Drive Folder per Job</div>
-        <div style="font-size:11px;color:var(--dim);line-height:1.5">Every new job automatically creates a named folder in Google Drive â all photos, sign-offs, and logs organized by floor and phase from day one.</div>
+        <div style="font-size:11px;color:var(--dim);line-height:1.5">Every new job automatically creates a named folder in Google Drive — all photos, sign-offs, and logs organized by floor and phase from day one.</div>
       </div>
     </div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;align-items:flex-start;gap:14px">
-      <div style="font-size:24px;flex-shrink:0">ð§</div>
+      <div style="font-size:24px;flex-shrink:0">📧</div>
       <div>
         <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Weekly Summary to Skygrid</div>
-        <div style="font-size:11px;color:var(--dim);line-height:1.5">Every Friday, a structured weekly progress summary â floors completed, phases advanced, issues resolved â is delivered to the Skygrid project team.</div>
+        <div style="font-size:11px;color:var(--dim);line-height:1.5">Every Friday, a structured weekly progress summary — floors completed, phases advanced, issues resolved — is delivered to the Skygrid project team.</div>
       </div>
     </div>
   </div>
@@ -799,23 +877,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ 07 QA ââ -->
+<!-- ══ 07 QA ══ -->
 <div class="section">
   <div class="section-hdr">
-    <span class="section-tag">07 Â· Quality Assurance</span>
+    <span class="section-tag">07 · Quality Assurance</span>
     <h2 class="section-title">Why your PDI will be cleaner than your last building</h2>
-    <p class="section-desc">Our QA model doesn't rely on a supervisor walking through at the end. Every floor is signed off phase by phase, with documented evidence, before the next phase begins. By the time your PDI team walks in, every suite has been through 3 separate sign-offs â with photos to prove it.</p>
+    <p class="section-desc">Our QA model doesn't rely on a supervisor walking through at the end. Every floor is signed off phase by phase, with documented evidence, before the next phase begins. By the time your PDI team walks in, every suite has been through 3 separate sign-offs — with photos to prove it.</p>
   </div>
   <div class="qa-grid">
     <div class="qa-card">
-      <div class="qa-num text-purple">4</div>
-      <div class="qa-label">Cleaning Phases</div>
-      <div class="qa-desc">Rough â Fine â PDI/Final + Non-Res Final. Each phase has its own checklist and sign-off requirement before the next begins.</div>
+      <div class="qa-num text-purple">3</div>
+      <div class="qa-label">Suite Clean Cycles</div>
+      <div class="qa-desc">Construction → Pre-PDI/PDI → Final Clean. Each cycle has its own checklist and sign-off requirement before the next begins.</div>
     </div>
     <div class="qa-card">
       <div class="qa-num text-blue">39</div>
       <div class="qa-label">Levels to Sign Off</div>
-      <div class="qa-desc">Every floor and parking level receives a documented completion record â signed digitally and filed before the next phase begins.</div>
+      <div class="qa-desc">Every floor and parking level receives a documented completion record — signed digitally and filed before the next phase begins.</div>
     </div>
     <div class="qa-card">
       <div class="qa-num text-green">100%</div>
@@ -829,38 +907,38 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     </div>
   </div>
   <div style="margin-top:40px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px">
-    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:20px">Phase Progression â Per Floor</div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:20px">Phase Progression — Per Floor</div>
     <div style="display:flex;align-items:center;gap:0;overflow-x:auto;min-width:500px">
       <div style="background:rgba(156,127,255,.15);border:1px solid rgba(156,127,255,.3);border-radius:8px;padding:14px 18px;text-align:center;flex:1;min-width:120px">
-        <div style="font-size:18px;margin-bottom:6px">ðµ</div>
+        <div style="font-size:18px;margin-bottom:6px">🔵</div>
         <div style="font-size:11px;font-weight:700;color:var(--purple)">Phase 1</div>
-        <div style="font-size:10px;color:var(--dim);margin-top:3px">Rough Clean<br>150 SF/hr</div>
+        <div style="font-size:10px;color:var(--dim);margin-top:3px">Debris removal · Initial sweep</div>
       </div>
-      <div style="color:var(--faint);font-size:20px;padding:0 8px">â</div>
+      <div style="color:var(--faint);font-size:20px;padding:0 8px">→</div>
       <div style="background:rgba(255,255,255,.04);border:1px dashed var(--border);border-radius:8px;padding:14px 18px;text-align:center;flex:0 0 140px;min-width:110px">
         <div style="font-size:11px;font-weight:700;color:var(--faint)">QA Sign-Off</div>
         <div style="font-size:9px;color:var(--faint);margin-top:3px">Photo + checklist submitted</div>
       </div>
-      <div style="color:var(--faint);font-size:20px;padding:0 8px">â</div>
+      <div style="color:var(--faint);font-size:20px;padding:0 8px">→</div>
       <div style="background:rgba(77,166,255,.15);border:1px solid rgba(77,166,255,.3);border-radius:8px;padding:14px 18px;text-align:center;flex:1;min-width:120px">
-        <div style="font-size:18px;margin-bottom:6px">ð·</div>
+        <div style="font-size:18px;margin-bottom:6px">🔷</div>
         <div style="font-size:11px;font-weight:700;color:var(--blue)">Phase 2</div>
-        <div style="font-size:10px;color:var(--dim);margin-top:3px">Fine Clean<br>185 SF/hr</div>
+        <div style="font-size:10px;color:var(--dim);margin-top:3px">Deep clean · Fixtures · Glass</div>
       </div>
-      <div style="color:var(--faint);font-size:20px;padding:0 8px">â</div>
+      <div style="color:var(--faint);font-size:20px;padding:0 8px">→</div>
       <div style="background:rgba(255,255,255,.04);border:1px dashed var(--border);border-radius:8px;padding:14px 18px;text-align:center;flex:0 0 140px;min-width:110px">
         <div style="font-size:11px;font-weight:700;color:var(--faint)">QA Sign-Off</div>
         <div style="font-size:9px;color:var(--faint);margin-top:3px">Photo + checklist submitted</div>
       </div>
-      <div style="color:var(--faint);font-size:20px;padding:0 8px">â</div>
+      <div style="color:var(--faint);font-size:20px;padding:0 8px">→</div>
       <div style="background:rgba(0,200,150,.15);border:1px solid rgba(0,200,150,.3);border-radius:8px;padding:14px 18px;text-align:center;flex:1;min-width:120px">
-        <div style="font-size:18px;margin-bottom:6px">â</div>
+        <div style="font-size:18px;margin-bottom:6px">✅</div>
         <div style="font-size:11px;font-weight:700;color:var(--green)">Phase 3</div>
-        <div style="font-size:10px;color:var(--dim);margin-top:3px">PDI / Final<br>210 SF/hr</div>
+        <div style="font-size:10px;color:var(--dim);margin-top:3px">White-glove · Suite sign-off</div>
       </div>
-      <div style="color:var(--faint);font-size:20px;padding:0 8px">â</div>
+      <div style="color:var(--faint);font-size:20px;padding:0 8px">→</div>
       <div style="background:rgba(227,6,19,.1);border:1px solid rgba(227,6,19,.3);border-radius:8px;padding:14px 18px;text-align:center;flex:1;min-width:120px">
-        <div style="font-size:18px;margin-bottom:6px">ð</div>
+        <div style="font-size:18px;margin-bottom:6px">🏁</div>
         <div style="font-size:11px;font-weight:700;color:var(--red)">Handover</div>
         <div style="font-size:10px;color:var(--dim);margin-top:3px">Floor cleared<br>for occupancy</div>
       </div>
@@ -870,133 +948,133 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ INVESTMENT SUMMARY ââ -->
+<!-- ══ INVESTMENT SUMMARY ══ -->
 <div class="section">
   <div class="section-hdr">
     <span class="section-tag">Investment Summary</span>
     <h2 class="section-title">Scope + pricing at a glance</h2>
-    <p class="section-desc">Pricing is provided per phase and per area type. All figures reflect a standard 8-person crew deployment. Volume adjustments and phased payment schedules are available â contact the SafeCan Inc. operations team at safecan.ca.</p>
+    <p class="section-desc">Pricing firm per Quote Ref 0893. Toggle <strong style="color:var(--purple)">Live Pricing Mode</strong> to adjust unit counts in real-time — every subtotal, phase total, HST, and grand total updates instantly as you type.</p>
   </div>
-  <div class="inv-table-wrap">
-    <table class="inv-table">
+
+  <!-- LIVE MODE BANNER -->
+  <div style="display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto 20px;background:rgba(156,127,255,0.07);border:1px solid rgba(156,127,255,0.2);border-radius:10px;padding:14px 20px;gap:16px;flex-wrap:wrap">
+    <div>
+      <div style="font-size:12px;font-weight:800;color:var(--purple);letter-spacing:.5px">&#x1F4A1; LIVE PRICING CALCULATOR</div>
+      <div id="calc-banner-desc" style="font-size:10px;color:var(--dim);margin-top:3px">Activate Edit Mode to adjust unit mix during client conversations</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div id="live-badge" style="display:none;font-size:8px;font-weight:800;letter-spacing:2px;padding:4px 10px;background:rgba(0,200,150,0.15);border:1px solid rgba(0,200,150,0.4);border-radius:20px;color:var(--green)">&#x25CF; LIVE</div>
+      <button onclick="toggleCalcMode()" id="calc-mode-btn" style="display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:8px;border:1px solid rgba(156,127,255,0.3);background:rgba(156,127,255,0.08);color:var(--purple);font-size:11px;font-weight:800;cursor:pointer;letter-spacing:.5px;transition:all .2s;white-space:nowrap">
+        <span id="calc-mode-dot" style="width:9px;height:9px;border-radius:50%;background:var(--faint);display:inline-block;transition:background .2s"></span>
+        <span id="calc-mode-label">EDIT MODE: OFF</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- UNIT MIX TABLE -->
+  <div class="inv-table-wrap" style="max-width:900px;margin:0 auto">
+    <div style="padding:11px 20px;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--faint)">Residential Suites &#x2014; 3-Clean Cycle (Construction &#xB7; Pre-PDI/PDI &#xB7; Final)</span>
+    </div>
+    <table class="inv-table" style="font-size:12px">
       <thead>
         <tr>
-          <th>Phase / Scope Item</th>
-          <th>Area</th>
-          <th>SF / Units</th>
-          <th>Rate</th>
-          <th>Subtotal</th>
+          <th style="min-width:160px">Unit Type</th>
+          <th style="text-align:center;width:72px">Qty</th>
+          <th style="text-align:right">Construction</th>
+          <th style="text-align:right">Pre-PDI / PDI</th>
+          <th style="text-align:right">Final Clean</th>
+          <th style="text-align:right">Row Total</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td><strong>Phase 1 â Rough Clean</strong><br><span style="font-size:10px;color:var(--dim)">Residential suites, debris removal, initial sweep</span></td>
-          <td>Residential</td>
-          <td>233,806 SF</td>
-          <td><span class="inv-blank"></span></td>
-          <td><span class="inv-blank"></span></td>
-        </tr>
-        <tr>
-          <td><strong>Phase 2 â Fine Clean</strong><br><span style="font-size:10px;color:var(--dim)">Full suite clean, windows, fixtures, surfaces</span></td>
-          <td>Residential</td>
-          <td>233,806 SF</td>
-          <td><span class="inv-blank"></span></td>
-          <td><span class="inv-blank"></span></td>
-        </tr>
-        <tr>
-          <td><strong>Phase 3 â PDI / Final Clean</strong><br><span style="font-size:10px;color:var(--dim)">White-glove suite prep for purchaser walkthroughs</span></td>
-          <td>Residential</td>
-          <td>233,806 SF</td>
-          <td><span class="inv-blank"></span></td>
-          <td><span class="inv-blank"></span></td>
-        </tr>
-        <tr>
-          <td><strong>Non-Res Final Clean</strong><br><span style="font-size:10px;color:var(--dim)">Common areas, lobby, amenity levels, retail, mechanical</span></td>
-          <td>Non-Residential</td>
-          <td>83,025 SF</td>
-          <td><span class="inv-blank"></span></td>
-          <td><span class="inv-blank"></span></td>
-        </tr>
-        <tr>
-          <td><strong>QA Supervision + Walkthroughs</strong><br><span style="font-size:10px;color:var(--dim)">Phase sign-offs, GC walkthroughs, deficiency resolution</span></td>
-          <td>All Areas</td>
-          <td>Included</td>
-          <td>â</td>
-          <td><span class="inv-blank"></span></td>
-        </tr>
-        <tr style="border-top:2px solid rgba(227,6,19,0.3)">
-          <td colspan="4" style="font-size:14px;font-weight:800;color:var(--text)">Total Investment (All Phases)</td>
-          <td style="font-size:18px;font-weight:900;color:var(--red)"><span class="inv-blank" style="min-width:160px"></span></td>
-        </tr>
-      </tbody>
+      <tbody id="calc-tbody"></tbody>
     </table>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-top:1px solid var(--border);background:rgba(255,255,255,.02);flex-wrap:wrap;gap:12px">
+      <div style="display:flex;gap:28px;flex-wrap:wrap">
+        <div><div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--purple);margin-bottom:4px">Construction Total</div><div id="phase-constr" style="font-size:15px;font-weight:900;color:var(--purple);font-family:monospace">$44,600</div></div>
+        <div><div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:4px">Pre-PDI / PDI Total</div><div id="phase-pdi" style="font-size:15px;font-weight:900;color:var(--blue);font-family:monospace">$39,625</div></div>
+        <div><div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:4px">Final Clean Total</div><div id="phase-final" style="font-size:15px;font-weight:900;color:var(--green);font-family:monospace">$28,315</div></div>
+      </div>
+      <div style="text-align:right"><div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint);margin-bottom:4px">Suite Sub-Total</div><div id="suite-subtotal" style="font-size:20px;font-weight:900;color:var(--text);font-family:monospace">$112,540</div></div>
+    </div>
   </div>
-  <div class="inv-note">
-    ð¡ <strong>Note:</strong> All pricing is based on 233,806 SF residential + 83,025 SF non-residential scope. Rates are held firm for 60 days from the issue date of this proposal (May 7, 2026). GST/HST is additional. Parking levels are excluded from this scope â pricing available on request.
+
+  <!-- SCOPE INCLUSIONS -->
+  <div style="max-width:900px;margin:10px auto 0;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+    <div style="padding:10px 20px;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border)"><span style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--faint)">Scope Inclusions &#x2014; click row to toggle</span></div>
+    <div style="padding:6px 12px">
+      <div class="scope-row" id="scope-amenity-row" onclick="toggleScope(event,'amenity')">
+        <input type="checkbox" class="scope-check" id="scope-amenity" checked onchange="calcLive()">
+        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;color:var(--text)">Amenity, Common Areas &amp; Retail <span style="font-size:10px;font-weight:400;color:var(--dim)">(3-clean cycle &#x2014; Indoor &amp; Outdoor amenity &#xB7; Common areas &#xB7; Retail)</span></div></div>
+        <span style="font-family:monospace;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;padding-left:16px">$23,880.00</span>
+      </div>
+      <div class="scope-row" id="scope-parking-row" onclick="toggleScope(event,'parking')">
+        <input type="checkbox" class="scope-check" id="scope-parking" checked onchange="calcLive()">
+        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;color:var(--text)">Parking Garage &#x2014; Specialty Clean <span style="font-size:10px;font-weight:400;color:var(--dim)">(P1&#x2013;P4 &#xB7; Power sweep + pressure wash &#xB7; 1 cycle)</span></div></div>
+        <span style="font-family:monospace;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;padding-left:16px">$8,950.00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTIONAL ADD-ONS -->
+  <div style="max-width:900px;margin:10px auto 0;background:rgba(156,127,255,0.04);border:1px solid rgba(156,127,255,0.15);border-radius:12px;overflow:hidden">
+    <div style="padding:10px 20px;background:rgba(156,127,255,0.06);border-bottom:1px solid rgba(156,127,255,0.15);display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple)">Optional Add-On Services</span>
+      <span style="font-size:9px;color:var(--dim)">Click row or checkbox to include in total</span>
+    </div>
+    <div style="padding:6px 12px">
+      <div class="addon-row" id="ao-windows-row" onclick="toggleAddon(event,'windows')"><input type="checkbox" class="addon-check" id="ao-windows" onchange="calcLive()"><div style="flex:1;font-size:12px;color:var(--dim)">&#x1FA9F; Exterior Window Cleaning <span style="font-size:10px">(all accessible glazing &#x2014; water-fed pole / Bosun chairs)</span></div><span style="font-family:monospace;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;padding-left:16px">$39,750.00</span></div>
+      <div class="addon-row" id="ao-hvac-row" onclick="toggleAddon(event,'hvac')"><input type="checkbox" class="addon-check" id="ao-hvac" onchange="calcLive()"><div style="flex:1;font-size:12px;color:var(--dim)">&#x1F32C;&#xFE0F; HVAC Piping Surface Clean <span style="font-size:10px">(parking garage &#x2014; exposed pipe surface dust removal)</span></div><span style="font-family:monospace;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;padding-left:16px">$5,600.00</span></div>
+      <div class="addon-row" id="ao-sump-row" onclick="toggleAddon(event,'sump')"><input type="checkbox" class="addon-check" id="ao-sump" onchange="calcLive()"><div style="flex:1;font-size:12px;color:var(--dim)">&#x1FAA3; Sump Pit Cleaning <span style="font-size:10px">(5 units &#x2014; debris and buildup removal, no mechanical servicing)</span></div><span style="font-family:monospace;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;padding-left:16px">$4,950.00</span></div>
+      <div class="addon-row" id="ao-labour-row" onclick="toggleAddon(event,'labour')"><input type="checkbox" class="addon-check" id="ao-labour" onchange="calcLive()"><div style="flex:1;font-size:12px;color:var(--dim)">&#x1F550; Additional Labour Allowance <span style="font-size:10px">(200 hrs @ $30.50/hr &#x2014; touch-ups, re-cleans, unready areas)</span></div><span style="font-family:monospace;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;padding-left:16px">$6,100.00</span></div>
+      <div class="addon-row" id="ao-fourth-row" onclick="toggleAddon(event,'fourth')"><input type="checkbox" class="addon-check" id="ao-fourth" onchange="calcLive()"><div style="flex:1;font-size:12px;color:var(--dim)">&#x1F504; Optional 4th Suite Cleaning Cycle <span style="font-size:10px">(all 322 residential units &#x2014; extended construction or deficiency turnover)</span></div><span style="font-family:monospace;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;padding-left:16px">$28,545.00</span></div>
+    </div>
+  </div>
+
+  <!-- GRAND TOTALS -->
+  <div style="max-width:900px;margin:10px auto 0;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+    <div style="display:flex;align-items:center;padding:12px 24px;border-bottom:1px solid var(--border)">
+      <span style="font-size:11px;color:var(--dim);flex:1">QA Sign-offs &amp; Supervision <span style="font-size:10px">(phase sign-offs, GC walkthroughs, photo documentation, deficiency resolution)</span></span>
+      <span style="font-size:12px;font-weight:700;color:var(--green);font-family:monospace;white-space:nowrap;padding-left:24px">Included</span>
+    </div>
+    <div style="display:flex;align-items:center;padding:14px 24px;border-bottom:1px solid var(--border)">
+      <span style="font-size:12px;font-weight:700;color:var(--dim);flex:1;text-align:right;padding-right:24px">Subtotal (excl. HST)</span>
+      <span id="tot-subtotal" style="font-size:18px;font-weight:800;color:var(--text);font-family:monospace;white-space:nowrap;min-width:140px;text-align:right">$145,370.00</span>
+    </div>
+    <div style="display:flex;align-items:center;padding:12px 24px;border-bottom:1px solid rgba(227,6,19,0.2)">
+      <span style="font-size:12px;font-weight:700;color:var(--dim);flex:1;text-align:right;padding-right:24px">HST (13%)</span>
+      <span id="tot-hst" style="font-size:14px;font-weight:700;color:var(--dim);font-family:monospace;white-space:nowrap;min-width:140px;text-align:right">$18,898.10</span>
+    </div>
+    <div style="display:flex;align-items:center;padding:20px 24px;background:rgba(227,6,19,0.08)">
+      <span style="font-size:14px;font-weight:800;color:var(--text);flex:1;text-align:right;padding-right:24px">TOTAL INVESTMENT (incl. HST)</span>
+      <span id="tot-total" style="font-size:26px;font-weight:900;color:var(--red);font-family:monospace;white-space:nowrap;min-width:140px;text-align:right">$164,268.10</span>
+    </div>
+  </div>
+
+  <div class="inv-note" style="margin-top:14px">
+    &#x1F4A1; <strong>Quote Ref: 0893 &#x2014; SkyGrid Construction &#xB7; 30 Merton St.</strong> &nbsp;|&nbsp; Per-unit rates derived from signed quotation. Live calculator scales proportionally based on quoted unit rates. Valid until <strong>May 31, 2026</strong>. Payment terms: Net 30.
   </div>
 </div>
-
 <div class="divider"></div>
 
-<!-- ââ WHY SAFECAN ââ -->
-<div class="section">
-  <div class="section-hdr">
-    <span class="section-tag">Why SafeCan</span>
-    <h2 class="section-title">The numbers behind the name</h2>
-    <p class="section-desc">SafeCan is a GTA-based post-construction cleaning and commercial janitorial company built specifically for high-rise residential and mixed-use developments. We don't do carpet cleaning or Jesidential move-outs â this is all we do.</p>
-  </div>
-  <div class="why-grid">
-    <div class="why-card">
-      <div class="why-num">__</div>
-      <div class="why-label">Years in Post-Construction Cleaning</div>
-      <div class="why-desc">Serving GTA developers, general contractors, and property managers across residential high-rise, commercial, and institutional projects.</div>
-    </div>
-    <div class="why-card">
-      <div class="why-num">__+</div>
-      <div class="why-label">High-Rise Projects Completed</div>
-      <div class="why-desc">From podium to penthouse â SafeCan has sequenced, staffed, and signed off post-construction cleaning across GTA's most demanding projects.</div>
-    </div>
-    <div class="why-card">
-      <div class="why-num">$__M</div>
-      <div class="why-label">Liability Insurance Coverage</div>
-      <div class="why-desc">Fully insured, WSIB-compliant, and safety-trained. Certificate of insurance provided upon request. [Add coverage amount and policy details.]</div>
-    </div>
-  </div>
-  <div style="margin-top:28px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;max-width:900px;margin-left:auto;margin-right:auto">
-    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:16px">Active Client Relationships â GTA</div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px">
-      <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--text)">Pomerleau</span>
-      <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--text)">Oben Build</span>
-      <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--text)">Harbour Hills</span>
-      <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--text)">Gateman Milloy</span>
-      <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--text)">IN8 Developments</span>
-      <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--text)">59 Project Mgmt</span>
-      <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--text)">Pratt Homes</span>
-      <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--text)">+ others</span>
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ââ TEAM ââ -->
+<!-- ══ TEAM ══ -->
 <div class="section">
   <div class="section-hdr">
     <span class="section-tag">Your Team on This Project</span>
     <h2 class="section-title">Who you'll be working with</h2>
-    <p class="section-desc">SafeCan assigns a dedicated team to Thirty Merton from mobilization through handover. One call, one email â always the same person. No call centres, no dispatch ambiguity.</p>
+    <p class="section-desc">SafeCan assigns a dedicated team to Thirty Merton from mobilization through handover. One call, one email — always the same person. No call centres, no dispatch ambiguity.</p>
   </div>
   <div class="team-grid">
     <div class="team-card">
-      <div class="team-avatar" style="background:none;padding:2px;overflow:visible"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 116" style="width:100%;height:100%;display:block"><path d="M50,1 L8,1 C3,1 0,5 0,11 L0,59 C0,87 22,107 50,115 C78,107 100,87 100,59 L100,11 C100,5 97,1 92,1 Z" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><path d="M50,4 L9,4 C5,4 2,8 2,14 L2,59 C2,86 23,105 50,115 Z" fill="#111"/><path d="M50,4 L91,4 C95,4 98,8 98,14 L98,59 C98,86 77,105 50,115 Z" fill="#E30613"/><path d="M50,4 L9,4 C5,4 2,8 2,14 L2,59 C2,86 23,105 50,115 C77,105 98,86 98,59 L98,14 C98,8 95,4 91,4 Z" fill="none" stroke="#000" stroke-width="3.5"/><line x1="50" y1="4" x2="50" y2="115" stroke="#000" stroke-width="1.5"/><path d="M50,13 L47,26 L35,23 L39,34 L22,28 L27,42 L10,51 L27,60 L22,74 L39,68 L36,85 L46,80 L46,98 L54,98 L54,80 L64,85 L61,68 L78,74 L73,60 L90,51 L73,42 L78,28 L61,34 L65,23 L53,26 Z" fill="white" stroke="rgba(0,0,0,0.28)" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+      <div class="team-avatar" style="background:var(--red);font-size:15px;font-weight:900">NK</div>
       <div>
-        <div class="team-name">SafeCan Inc.</div>
-        <div class="team-role">Operations Team</div>
-        <div class="team-contact">safecan.ca<br>info@safecan.ca<br><span style="font-size:10px;color:var(--faint)">Primary contact Â· Available 7 days</span></div>
+        <div class="team-name">Noorinder Kainth</div>
+        <div class="team-role">Business Development Manager</div>
+        <div class="team-contact">noorinder@safecan.ca<br>(647) 248-5767<br><span style="font-size:10px;color:var(--faint)">Primary SafeCan contact · Quote Ref 0893</span></div>
       </div>
     </div>
     <div class="team-card">
-      <div class="team-avatar dim" style="font-size:18px">ð·</div>
+      <div class="team-avatar dim" style="font-size:18px">👷</div>
       <div>
         <div class="team-name">[Site Supervisor TBD]</div>
         <div class="team-role">Site Supervisor</div>
@@ -1004,11 +1082,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
       </div>
     </div>
     <div class="team-card">
-      <div class="team-avatar dim" style="font-size:18px">ð</div>
+      <div class="team-avatar" style="background:rgba(77,166,255,0.2);border:1px solid rgba(77,166,255,0.4);font-size:14px;font-weight:900;color:var(--blue)">ZS</div>
       <div>
-        <div class="team-name">[QA Lead TBD]</div>
-        <div class="team-role">Quality Assurance Lead</div>
-        <div class="team-placeholder">Responsible for all floor sign-offs and completion reports. Conducts walkthroughs before PDI on each suite.</div>
+        <div class="team-name">Zeinab Sayyahzadeh</div>
+        <div class="team-role" style="color:var(--blue)">Skygrid — Client Contact</div>
+        <div class="team-contact">zsayyahzadeh@skygrid.ca<br>(647) 518-6473<br><span style="font-size:10px;color:var(--faint)">30 Merton St. project contact</span></div>
       </div>
     </div>
   </div>
@@ -1016,7 +1094,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ ASSUMPTIONS & EXCLUSIONS ââ -->
+<!-- ══ ASSUMPTIONS & EXCLUSIONS ══ -->
 <div class="section">
   <div class="section-hdr">
     <span class="section-tag">Assumptions & Exclusions</span>
@@ -1025,22 +1103,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   </div>
   <div class="ae-grid">
     <div class="ae-card">
-      <div class="ae-title"><span style="font-size:18px">â</span> Assumptions</div>
+      <div class="ae-title"><span style="font-size:18px">✅</span> Assumptions</div>
       <div class="ae-list">
         <div class="ae-item"><div class="ae-dot green"></div>Construction team provides floor-by-floor turnover schedule minimum 48 hours in advance.</div>
-        <div class="ae-item"><div class="ae-dot green"></div>SafeCan has access to freight elevators during scheduled working hours (7amâ5pm MonâFri).</div>
+        <div class="ae-item"><div class="ae-dot green"></div>SafeCan has access to freight elevators during scheduled working hours (7am–5pm Mon–Fri).</div>
         <div class="ae-item"><div class="ae-dot green"></div>Temporary power and water available on each floor during cleaning phases.</div>
         <div class="ae-item"><div class="ae-dot green"></div>All construction debris is removed by trades before rough clean begins.</div>
-        <div class="ae-item"><div class="ae-dot green"></div>Parking levels (P1âP4) are excluded from this scope and priced separately if required.</div>
+        <div class="ae-item"><div class="ae-dot green"></div>Parking levels (P1–P4) are excluded from this scope and priced separately if required.</div>
         <div class="ae-item"><div class="ae-dot green"></div>Skygrid designates one project contact for scheduling coordination and sign-offs.</div>
         <div class="ae-item"><div class="ae-dot green"></div>Pricing is firm for 60 days from the proposal issue date (May 7, 2026).</div>
       </div>
     </div>
     <div class="ae-card">
-      <div class="ae-title"><span style="font-size:18px">ð«</span> Exclusions</div>
+      <div class="ae-title"><span style="font-size:18px">🚫</span> Exclusions</div>
       <div class="ae-list">
-        <div class="ae-item"><div class="ae-dot red"></div>Cleaning of parking levels P1âP4 (available as add-on scope).</div>
-        <div class="ae-item"><div class="ae-dot red"></div>Exterior window cleaning above ground level (requires specialized equipment â quoted separately).</div>
+        <div class="ae-item"><div class="ae-dot red"></div>Cleaning of parking levels P1–P4 (available as add-on scope).</div>
+        <div class="ae-item"><div class="ae-dot red"></div>Exterior window cleaning above ground level (requires specialized equipment — quoted separately).</div>
         <div class="ae-item"><div class="ae-dot red"></div>Supply of cleaning materials and consumables unless explicitly stated.</div>
         <div class="ae-item"><div class="ae-dot red"></div>Waste disposal beyond standard bagging and placement at designated site waste areas.</div>
         <div class="ae-item"><div class="ae-dot red"></div>Restoration or repair of any surface damage caused by other trades.</div>
@@ -1053,87 +1131,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ COMPARABLE PROJECTS ââ -->
-<div class="section">
-  <div class="section-hdr">
-    <span class="section-tag">Recent Comparable Projects</span>
-    <h2 class="section-title">We've done this before</h2>
-    <p class="section-desc">SafeCan has delivered post-construction cleaning on residential high-rise and mixed-use projects across the GTA at comparable scale. References available upon request.</p>
-  </div>
-  <div class="comp-band">
-    <div style="font-size:11px;color:var(--faint);margin-bottom:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase">Project references â to be populated before client delivery</div>
-    <div style="font-size:13px;color:var(--dim);line-height:1.7">[Add 3 comparable projects here: client name, location, SF, phase types, and a one-line outcome. References available on request â see References section below.]</div>
-    <div class="comp-grid">
-      <div class="comp-card">
-        <div class="comp-client">[Client Name]</div>
-        <div class="comp-detail">[Project Address]<br>[X] floors Â· [X,XXX] SF Â· [Phases]<br>[One-line outcome]</div>
-        <div><span class="comp-tag" style="background:var(--blue-dim);color:var(--blue)">High-Rise Residential</span></div>
-      </div>
-      <div class="comp-card">
-        <div class="comp-client">[Client Name]</div>
-        <div class="comp-detail">[Project Address]<br>[X] floors Â· [X,XXX] SF Â· [Phases]<br>[One-line outcome]</div>
-        <div><span class="comp-tag" style="background:var(--green-dim);color:var(--green)">Mixed-Use</span></div>
-      </div>
-      <div class="comp-card">
-        <div class="comp-client">[Client Name]</div>
-        <div class="comp-detail">[Project Address]<br>[X] floors Â· [X,XXX] SF Â· [Phases]<br>[One-line outcome]</div>
-        <div><span class="comp-tag" style="background:var(--purple-dim);color:var(--purple)">Commercial</span></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ââ REFERENCES ââ -->
-<div class="section">
-  <div class="section-hdr">
-    <span class="section-tag">References</span>
-    <h2 class="section-title">Ask the people we've worked with</h2>
-    <p class="section-desc">SafeCan can provide references from GC contacts and project managers on comparable projects. Available upon request â contact SafeCan Inc. directly at safecan.ca.</p>
-  </div>
-  <div class="ref-band">
-    <div style="font-size:32px;margin-bottom:16px">ð</div>
-    <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px">References available on request</div>
-    <div style="font-size:12px;color:var(--dim);line-height:1.7;max-width:500px;margin:0 auto">[To be populated with 2â3 GC or developer contacts from comparable GTA high-rise projects. Include name, company, phone, and project context.]</div>
-    <div style="margin-top:20px;display:inline-block;padding:10px 24px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;color:var(--text)">SafeCan Inc. Â· safecan.ca Â· info@safecan.ca</div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ââ PAYMENT TERMS ââ -->
-<div class="section">
-  <div class="section-hdr">
-    <span class="section-tag">Payment Terms</span>
-    <h2 class="section-title">Simple, milestone-based billing</h2>
-    <p class="section-desc">SafeCan invoices on a phase-completion basis â you pay as we deliver, not before. No large deposits, no surprise costs. All terms are negotiable at contract stage.</p>
-  </div>
-  <div class="text-card">
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center">
-      <div style="padding:20px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid var(--border)">
-        <div style="font-size:32px;font-weight:900;color:var(--blue);margin-bottom:8px">__%</div>
-        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:6px">Upon Mobilization</div>
-        <div style="font-size:10px;color:var(--dim)">[To be filled â typically 10â20% deposit on mobilization]</div>
-      </div>
-      <div style="padding:20px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid var(--border)">
-        <div style="font-size:32px;font-weight:900;color:var(--green);margin-bottom:8px">__%</div>
-        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:6px">Per Phase Completion</div>
-        <div style="font-size:10px;color:var(--dim)">[Progress invoices upon each phase sign-off â Rough, Fine, PDI, Non-Res]</div>
-      </div>
-      <div style="padding:20px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid var(--border)">
-        <div style="font-size:32px;font-weight:900;color:var(--red);margin-bottom:8px">Net __</div>
-        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:6px">Payment Terms</div>
-        <div style="font-size:10px;color:var(--dim)">[Standard Net 30 from invoice date â discuss at contract stage]</div>
-      </div>
-    </div>
-    <div style="margin-top:20px;font-size:11px;color:var(--faint);text-align:center;line-height:1.6">All invoices include GST/HST (HST #[to be added]). Overdue accounts subject to [__]% monthly interest. Certificate of insurance and WSIB clearance provided at contract signing.</div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ââ CHANGE MANAGEMENT ââ -->
+<!-- ══ CHANGE MANAGEMENT ══ -->
 <div class="section">
   <div class="section-hdr">
     <span class="section-tag">Change Management</span>
@@ -1142,7 +1140,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   </div>
   <div class="text-card">
     <div class="text-body">
-      <p><strong style="color:var(--text)">Written Change Orders Only.</strong> Any change to the approved scope of work â additional floors, added phases, expanded areas, or schedule changes â is documented in a written Change Order before work proceeds. No verbal authorizations.</p>
+      <p><strong style="color:var(--text)">Written Change Orders Only.</strong> Any change to the approved scope of work — additional floors, added phases, expanded areas, or schedule changes — is documented in a written Change Order before work proceeds. No verbal authorizations.</p>
       <p><strong style="color:var(--text)">48-Hour Turnaround.</strong> SafeCan will provide a written Change Order with updated pricing and timeline impact within 48 hours of any scope change request from Skygrid.</p>
       <p><strong style="color:var(--text)">No Unauthorized Work.</strong> SafeCan will not perform work outside the approved scope without a signed Change Order. This protects both parties and ensures clean invoicing at every phase.</p>
       <p><strong style="color:var(--text)">Schedule Impacts Flagged Immediately.</strong> If any change to scope will impact the 16-week handover timeline, Skygrid will be notified in writing within 24 hours with a revised schedule and options.</p>
@@ -1152,7 +1150,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 <div class="divider"></div>
 
-<!-- ââ NEXT STEPS ââ -->
+<!-- ══ NEXT STEPS ══ -->
 <div class="section">
   <div class="section-hdr">
     <span class="section-tag">Next Steps</span>
@@ -1163,7 +1161,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     <div class="ns-card">
       <div class="ns-step">01</div>
       <div class="ns-title">Review & Approve</div>
-      <div class="ns-desc">Review this proposal and confirm scope. Review this proposal and contact SafeCan Inc. at safecan.ca with any questions or revisions before signing.</div>
+      <div class="ns-desc">Review this proposal and confirm scope, inclusions, and any custom requirements. Contact SafeCan directly with questions or revisions before signing.</div>
     </div>
     <div class="ns-card">
       <div class="ns-step">02</div>
@@ -1177,28 +1175,28 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     </div>
   </div>
   <div style="max-width:600px;margin:0 auto;background:var(--card);border:1px solid rgba(227,6,19,.25);border-radius:12px;padding:32px;text-align:center">
-    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px">SafeCan Inc. â Operations Team</div>
-    <div style="font-size:12px;color:var(--dim);margin-bottom:20px">Your direct contact from proposal to handover.</div>
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px">SafeCan Inc. — Sales Team</div>
+    <div style="font-size:12px;color:var(--dim);margin-bottom:20px">Your direct contact for this proposal and project.</div>
     <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
-      <a href="https://safecan.ca" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--red);color:#fff;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none">ð safecan.ca</a>
-      <a href="mailto:info@safecan.ca" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:12px;font-weight:800;text-decoration:none">â info@safecan.ca</a>
+      <a href="tel:6476897555" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--red);color:#fff;border-radius:8px;font-size:12px;font-weight:800;text-decoration:none">📞 (647) 689-7555</a>
+      <a href="mailto:noorinder@safecan.ca" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:12px;font-weight:800;text-decoration:none">✉ noorinder@safecan.ca</a>
     </div>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- ââ FOOTER ââ -->
+<!-- ══ FOOTER ══ -->
 <div class="footer-section">
   <div class="footer-logo">
-    <div class="sc-logo" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 116" style="width:100%;height:100%;display:block"><path d="M50,1 L8,1 C3,1 0,5 0,11 L0,59 C0,87 22,107 50,115 C78,107 100,87 100,59 L100,11 C100,5 97,1 92,1 Z" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><path d="M50,4 L9,4 C5,4 2,8 2,14 L2,59 C2,86 23,105 50,115 Z" fill="#111"/><path d="M50,4 L91,4 C95,4 98,8 98,14 L98,59 C98,86 77,105 50,115 Z" fill="#E30613"/><path d="M50,4 L9,4 C5,4 2,8 2,14 L2,59 C2,86 23,105 50,115 C77,105 98,86 98,59 L98,14 C98,8 95,4 91,4 Z" fill="none" stroke="#000" stroke-width="3.5"/><line x1="50" y1="4" x2="50" y2="115" stroke="#000" stroke-width="1.5"/><path d="M50,13 L47,26 L35,23 L39,34 L22,28 L27,42 L10,51 L27,60 L22,74 L39,68 L36,85 L46,80 L46,98 L54,98 L54,80 L64,85 L61,68 L78,74 L73,60 L90,51 L73,42 L78,28 L61,34 L65,23 L53,26 Z" fill="white" stroke="rgba(0,0,0,0.28)" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+    <div class="sc-logo" style="width:48px;height:48px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 114" style="width:100%;height:100%;display:block"><path d="M50,3 L11,3 C6,3 3,7 3,13 L3,57 C3,83 23,101 50,112 Z" fill="#1a1a1a"/><path d="M50,3 L89,3 C94,3 97,7 97,13 L97,57 C97,83 77,101 50,112 Z" fill="#E30613"/><path d="M50,3 L11,3 C6,3 3,7 3,13 L3,57 C3,83 23,101 50,112 C77,101 97,83 97,57 L97,13 C97,7 94,3 89,3 Z" fill="none" stroke="#111" stroke-width="4"/><path d="M50,16 L47.5,27 L37,24.5 L41,35 L26,30 L31,42 L15,50 L31,58 L26,70 L41,65 L38,80 L47.5,76.5 L47.5,94 L52.5,94 L52.5,76.5 L62,80 L59,65 L74,70 L69,58 L85,50 L69,42 L74,30 L59,35 L63,24.5 L52.5,27 Z" fill="white"/></svg></div>
     <div style="text-align:left">
       <div style="font-size:18px;font-weight:900;color:var(--text)">SafeCan Inc.</div>
-      <div style="font-size:11px;color:var(--dim)">Post-Construction Cleaning Â· Commercial Janitorial Â· GTA</div>
+      <div style="font-size:11px;color:var(--dim)">Post-Construction Cleaning · Commercial Janitorial · GTA</div>
     </div>
   </div>
   <div class="footer-tagline">SafeCan is ready to mobilize on Thirty Merton the moment construction begins handing over floors. Our system is already built. Our crew model is already calibrated. We're ready when you are.</div>
-  <button class="pdf-btn" onclick="window.print()">â¬ Download Proposal (PDF)</button>
+  <button class="pdf-btn" onclick="window.print()">⬇ Download Proposal (PDF)</button>
   <div class="footer-divider"></div>
   <div class="footer-contact">
     <div class="footer-contact-item">
@@ -1207,291 +1205,339 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     </div>
     <div class="footer-contact-item">
       <div class="footer-contact-label">Website</div>
-      <div class="footer-contact-val">safecan.ca</div>
+      <div class="footer-contact-val"><a href="https://www.safecan.ca" target="_blank" style="color:var(--text);text-decoration:none">www.safecan.ca</a></div>
     </div>
     <div class="footer-contact-item">
       <div class="footer-contact-label">Email</div>
-      <div class="footer-contact-val">info@safecan.ca</div>
+      <div class="footer-contact-val"><a href="mailto:noorinder@safecan.ca" style="color:var(--text);text-decoration:none">noorinder@safecan.ca</a></div>
     </div>
     <div class="footer-contact-item">
-      <div class="footer-contact-label">Website</div>
-      <div class="footer-contact-val">safecan.ca</div>
+      <div class="footer-contact-label">Phone</div>
+      <div class="footer-contact-val"><a href="tel:6476897555" style="color:var(--text);text-decoration:none">(647) 689-7555</a></div>
     </div>
     <div class="footer-contact-item">
       <div class="footer-contact-label">Location</div>
       <div class="footer-contact-val">77 Hale Rd, Brampton ON</div>
     </div>
   </div>
-  <div class="footer-copy">Â© 2026 SafeCan Inc. Â· Proposal SC-2026-0507-SKY Â· Confidential â Prepared exclusively for <span>Skygrid</span> Â· Thirty Merton Project Â· Valid until July 6, 2026</div>
+  <div class="footer-copy">© 2026 SafeCan Inc. · Quote Ref 0893 · SC-2026-0507-SKY · Confidential — Prepared exclusively for <span>Skygrid</span> · 30 Merton St. Project · Valid until May 31, 2026</div>
 </div>
 
 <script>
-// -- PRODUCTIVITY CALCULATOR --
-let currentPhase = { rate: 150, sf: 233806, name: 'Rough Clean', color: 'red' };
+// ── STATE ──────────────────────────────────────────────────────────────────
+var currentPhase = { rate: 150, sf: 233806, name: 'Rough Clean', color: 'purple', hlCls: 'bar-rough' };
+var CREW_SIZES = [3,4,6,8,10,12,14,16,18,20];
+var prodChart = null;
 
-function selectPhase(btn, color, rate, name, sfLabel, sf) {
-  document.querySelectorAll('.phase-btn').forEach(b => b.className = 'phase-btn');
+// ── PHASE SELECTOR ─────────────────────────────────────────────────────────
+function selectPhase(btn, color, rate, name, sfLabel, sf, hlCls) {
+  document.querySelectorAll('.phase-btn').forEach(function(b){ b.className = 'phase-btn'; });
   btn.className = 'phase-btn active-' + color;
-  currentPhase = { rate, sf, name, color };
+  currentPhase = { rate: rate, sf: sf, name: name, color: color, hlCls: hlCls };
   updateCalc();
-  if(prodChart){
-    var rateMap={150:0,185:1,210:2};
-    var activeIdx=rateMap[rate]!==undefined?rateMap[rate]:-1;
-    prodChart.data.datasets.forEach(function(ds,i){
-      ds.borderWidth = i===activeIdx ? 3.5 : 1.5;
-      ds.borderColor = i===activeIdx
-        ? ['#9c7fff','#4da6ff','#00c896'][i]
-        : ['rgba(156,127,255,0.35)','rgba(77,166,255,0.35)','rgba(0,200,150,0.35)'][i];
-    });
-    prodChart.update('none');
-  }
 }
 
+// ── CALCULATOR ─────────────────────────────────────────────────────────────
 function updateCalc() {
-  const crew = parseInt(document.getElementById('crew-slider').value);
+  var crew = parseInt(document.getElementById('crew-slider').value);
   document.getElementById('crew-display').textContent = crew;
-  const { rate, sf, name } = currentPhase;
-  const sfDay = crew * 8 * rate;
-  const days = Math.ceil(sf / sfDay);
-  const hrs = crew * 8;
+  var rate = currentPhase.rate, sf = currentPhase.sf;
+  var sfDay = crew * 8 * rate;
+  var days  = Math.ceil(sf / sfDay);
+  var hrs   = crew * 8;
   document.getElementById('res-sfday').textContent = sfDay.toLocaleString();
-  document.getElementById('res-days').textContent = days;
-  document.getElementById('res-hrs').textContent = hrs;
+  document.getElementById('res-days').textContent  = days;
+  document.getElementById('res-hrs').textContent   = hrs;
   document.getElementById('calc-explain').textContent =
-    crew + ' workers x 8 hrs x ' + rate + ' SF/hr = ' + sfDay.toLocaleString() + ' SF/day  |  ' + sf.toLocaleString() + ' SF / ' + sfDay.toLocaleString() + ' = ' + days + ' days';
+    crew + ' workers · ' + sfDay.toLocaleString() + ' SF/day output · ' + sf.toLocaleString() + ' SF ÷ ' + sfDay.toLocaleString() + ' = ' + days + ' working days';
   updateBars(crew);
-  if(prodChart){prodChart.update('none');}
+  updateProdChart(crew);
+  buildGantt(crew);
 }
 
+// ── BARS ───────────────────────────────────────────────────────────────────
 function updateBars(crew) {
-  const phases = [
-    { name: 'Phase 1 - Rough Clean', rate: 150, sf: 233806, color: 'var(--purple)', max: 20160 },
-    { name: 'Phase 2 - Fine Clean', rate: 185, sf: 233806, color: 'var(--blue)', max: 20160 },
-    { name: 'Phase 3 - PDI / Final', rate: 210, sf: 233806, color: 'var(--green)', max: 20160 },
-    { name: 'Non-Res Final Clean', rate: 185, sf: 83025, color: 'var(--yellow)', max: 20160 },
+  var phases = [
+    { name: 'Phase 1 – Rough Clean', rate: 150, sf: 233806, color: 'var(--purple)' },
+    { name: 'Phase 2 – Fine Clean',  rate: 185, sf: 233806, color: 'var(--blue)'   },
+    { name: 'Phase 3 – PDI / Final', rate: 210, sf: 233806, color: 'var(--green)'  },
+    { name: 'Non-Res Final Clean',         rate: 185, sf: 83025,  color: 'var(--yellow)' },
   ];
-  const container = document.getElementById('prod-bars');
+  var maxPossible = 20 * 8 * 210;
+  var container = document.getElementById('prod-bars');
   container.innerHTML = '';
   phases.forEach(function(ph) {
-    const sfDay = crew * 8 * ph.rate;
-    const pct = Math.min(sfDay / 20160 * 100, 100);
-    const days = Math.ceil(ph.sf / sfDay);
-    container.innerHTML += '<div class="bar-row"><div class="bar-label">' + ph.name + '</div><div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + ph.color + ';color:rgba(255,255,255,.85)" data-val="' + days + ' days">' + sfDay.toLocaleString() + ' SF/day</div></div><div class="bar-crew" style="color:' + ph.color + '">' + days + 'd</div></div>';
+    var sfDay = crew * 8 * ph.rate;
+    var pct   = Math.min(sfDay / maxPossible * 100, 100);
+    var days  = Math.ceil(ph.sf / sfDay);
+    var div = document.createElement('div');
+    div.className = 'bar-row';
+    div.innerHTML =
+      '<div class="bar-label">' + ph.name + '</div>' +
+      '<div class="bar-track"><div class="bar-fill" style="width:' + pct.toFixed(1) + '%;background:' + ph.color + '" data-val="' + days + 'd">' +
+      sfDay.toLocaleString() + ' SF/d</div></div>' +
+      '<div class="bar-crew" style="color:' + ph.color + '">' + days + 'd</div>';
+    container.appendChild(div);
   });
 }
 
-// -- PRODUCTIVITY CHART --
-
-var crewIndicatorPlugin = {
-  id: 'crewIndicator',
-  afterDatasetsDraw: function(chart) {
-    var sliderEl = document.getElementById('crew-slider');
-    if (!sliderEl) return;
-    var crew = parseInt(sliderEl.value);
-    var crewSizes = [4,6,8,10,12,14,16,18,20];
-    var xIdx = (crew - 4) / 2;
-    var x = chart.scales.x.getPixelForValue(xIdx);
-    var topY = chart.chartArea.top;
-    var bottomY = chart.chartArea.bottom;
-    var ctx = chart.ctx;
-    // vertical dashed line
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(x, topY);
-    ctx.lineTo(x, bottomY);
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = 'rgba(255,255,255,0.22)';
-    ctx.setLineDash([5,4]);
-    ctx.stroke();
-    // dots at each phase curve intersection
-    var phaseRates = [150, 185, 210];
-    var colors = ['#9c7fff','#4da6ff','#00c896'];
-    phaseRates.forEach(function(rate,i){
-      var yVal = crew * 8 * rate;
-      var y = chart.scales.y.getPixelForValue(yVal);
-      ctx.beginPath();
-      ctx.arc(x, y, 5, 0, Math.PI*2);
-      ctx.fillStyle = colors[i];
-      ctx.fill();
-      ctx.setLineDash([]);
-      ctx.lineWidth = 1.5;
-      ctx.strokeStyle = '#0a0d1a';
-      ctx.stroke();
-    });
-    // crew label above line
-    ctx.setLineDash([]);
-    ctx.fillStyle = 'rgba(255,255,255,0.65)';
-    ctx.font = '700 10px system-ui,sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(crew + ' crew', x, topY - 5);
-    ctx.restore();
-  }
-};
-
-let prodChart;
+// ── CHART ──────────────────────────────────────────────────────────────────
 function initProdChart() {
-  const ctx = document.getElementById('prod-chart').getContext('2d');
-  const crewSizes = [4, 6, 8, 10, 12, 14, 16, 18, 20];
+  var ctx = document.getElementById('prod-chart').getContext('2d');
   prodChart = new Chart(ctx, {
-    plugins: [crewIndicatorPlugin],
     type: 'line',
     data: {
-      labels: crewSizes.map(function(c){ return c + ' crew'; }),
+      labels: CREW_SIZES.map(function(c){ return c + ' crew'; }),
       datasets: [
-        { label: 'Phase 1 (150 SF/hr)', data: crewSizes.map(function(c){ return c*8*150; }), borderColor: '#9c7fff', backgroundColor: 'rgba(156,127,255,0.1)', tension: 0.4, fill: false, pointRadius: 3, borderWidth: 2 },
-        { label: 'Phase 2 (185 SF/hr)', data: crewSizes.map(function(c){ return c*8*185; }), borderColor: '#4da6ff', backgroundColor: 'rgba(77,166,255,0.1)', tension: 0.4, fill: false, pointRadius: 3, borderWidth: 2 },
-        { label: 'Phase 3 (210 SF/hr)', data: crewSizes.map(function(c){ return c*8*210; }), borderColor: '#00c896', backgroundColor: 'rgba(0,200,150,0.1)', tension: 0.4, fill: false, pointRadius: 3, borderWidth: 2 },
+        { label: 'Phase 1 – Rough Clean',
+          data: CREW_SIZES.map(function(c){ return c*8*150; }),
+          borderColor: '#9c7fff', backgroundColor: 'rgba(156,127,255,0.08)',
+          tension: 0.4, fill: true, pointRadius: 4, pointHoverRadius: 8,
+          pointBackgroundColor: CREW_SIZES.map(function(){ return 'transparent'; }),
+          pointBorderColor: '#9c7fff', pointBorderWidth: 2, borderWidth: 2.5 },
+        { label: 'Phase 2 – Fine Clean',
+          data: CREW_SIZES.map(function(c){ return c*8*185; }),
+          borderColor: '#4da6ff', backgroundColor: 'rgba(77,166,255,0.08)',
+          tension: 0.4, fill: true, pointRadius: 4, pointHoverRadius: 8,
+          pointBackgroundColor: CREW_SIZES.map(function(){ return 'transparent'; }),
+          pointBorderColor: '#4da6ff', pointBorderWidth: 2, borderWidth: 2.5 },
+        { label: 'Phase 3 – PDI / Final',
+          data: CREW_SIZES.map(function(c){ return c*8*210; }),
+          borderColor: '#00c896', backgroundColor: 'rgba(0,200,150,0.08)',
+          tension: 0.4, fill: true, pointRadius: 4, pointHoverRadius: 8,
+          pointBackgroundColor: CREW_SIZES.map(function(){ return 'transparent'; }),
+          pointBorderColor: '#00c896', pointBorderWidth: 2, borderWidth: 2.5 },
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: true,
+      animation: { duration: 200 },
       plugins: {
         legend: { labels: { color: '#8892a4', font: { size: 10, weight: '700' }, boxWidth: 12, padding: 16 } },
-        tooltip: { backgroundColor: '#13172a', borderColor: 'rgba(255,255,255,.1)', borderWidth: 1, titleColor: '#e8eaf0', bodyColor: '#8892a4',
-          callbacks: { label: function(ctx){ return ' ' + ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString() + ' SF/day'; } }
+        tooltip: {
+          backgroundColor: '#13172a', borderColor: 'rgba(255,255,255,.12)', borderWidth: 1,
+          titleColor: '#e8eaf0', bodyColor: '#8892a4',
+          callbacks: { label: function(c){ return ' ' + c.dataset.label + ': ' + c.parsed.y.toLocaleString() + ' SF/day'; } }
         }
       },
       scales: {
         x: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#4a5268', font: { size: 10 } } },
-        y: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#4a5268', font: { size: 10 }, callback: function(v){ return (v/1000).toFixed(0) + 'K SF/d'; } } }
+        y: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#4a5268', font: { size: 10 },
+          callback: function(v){ return (v/1000).toFixed(0) + 'K SF/d'; } } }
       }
     }
   });
 }
 
-// -- GANTT CHART --
-function buildGantt() {
-  const WEEKS = 16;
-  const W = 100 / WEEKS;
-  const wlContainer = document.getElementById('gantt-week-labels');
-  for (var w = 1; w <= WEEKS; w++) {
-    var d = document.createElement('div');
-    d.style.cssText = 'flex:1;text-align:center;font-size:9px;font-weight:700;color:var(--faint);letter-spacing:.5px;white-space:nowrap';
-    d.textContent = w === 1 ? 'WK 1' : w % 2 === 0 ? 'WK ' + w : '';
-    wlContainer.appendChild(d);
-  }
-  var rows = [
-    { name: 'Podium (L1-L7)', sub: '83,431 SF - 48 suites', bars: [
-      { s:1, e:4, cls:'bar-rough', txt:'Rough Clean' },
-      { s:3, e:6, cls:'bar-fine',  txt:'Fine Clean' },
-      { s:5, e:8, cls:'bar-pdi',   txt:'PDI / Final' },
-    ]},
-    { name: 'Tower Low (L8-L15)', sub: '63,350 SF - 8 flr', bars: [
-      { s:2, e:6, cls:'bar-rough', txt:'Rough Clean' },
-      { s:5, e:8, cls:'bar-fine',  txt:'Fine Clean' },
-      { s:7, e:10, cls:'bar-pdi',  txt:'PDI / Final' },
-    ]},
-    { name: 'Tower Mid (L16-L24)', sub: '90,450 SF - 9 flr', bars: [
-      { s:4, e:8, cls:'bar-rough', txt:'Rough Clean' },
-      { s:7, e:10, cls:'bar-fine', txt:'Fine Clean' },
-      { s:9, e:12, cls:'bar-pdi',  txt:'PDI / Final' },
-    ]},
-    { name: 'Tower High (L25-L32)', sub: '61,300 SF - 8 flr', bars: [
-      { s:6, e:9,  cls:'bar-rough', txt:'Rough Clean' },
-      { s:8, e:11, cls:'bar-fine',  txt:'Fine Clean' },
-      { s:10, e:13, cls:'bar-pdi', txt:'PDI / Final' },
-    ]},
-    { name: 'Upper (L33-L34)', sub: '14,775 SF - Penthouse', bars: [
-      { s:7, e:9,  cls:'bar-rough', txt:'Rough' },
-      { s:9, e:11, cls:'bar-fine',  txt:'Fine' },
-      { s:11, e:13, cls:'bar-pdi', txt:'PDI' },
-    ]},
-    { name: 'Non-Res + Common', sub: '83,025 SF - All levels', bars: [
-      { s:10, e:14, cls:'bar-nonres', txt:'Non-Res Final Clean' },
-    ]},
-    { name: 'QC + Walkthroughs', sub: 'Final sign-off - Handover', bars: [
-      { s:13, e:16, cls:'bar-qc', txt:'QC & Handover' },
-    ]},
+function updateProdChart(crew) {
+  if (!prodChart) return;
+  var idx = CREW_SIZES.indexOf(crew);
+  var dotColors = ['rgba(156,127,255,1)','rgba(77,166,255,1)','rgba(0,200,150,1)'];
+  prodChart.data.datasets.forEach(function(ds, di) {
+    ds.pointRadius = CREW_SIZES.map(function(_, i){ return i === idx ? 9 : 3; });
+    ds.pointBackgroundColor = CREW_SIZES.map(function(_, i){ return i === idx ? dotColors[di] : 'transparent'; });
+    ds.pointBorderColor = CREW_SIZES.map(function(_, i){ return dotColors[di]; });
+    ds.pointBorderWidth = CREW_SIZES.map(function(_, i){ return i === idx ? 3 : 1; });
+  });
+  prodChart.update('none');
+}
+
+// ── GANTT (DYNAMIC) ────────────────────────────────────────────────────────
+function buildGanttData(crew) {
+  var WD = 5, HRS = 8;
+  function dw(sf, rate){ return (sf / (crew * HRS * rate)) / WD; }
+
+  var sections = [
+    { name: 'Podium (L1–L7)',        sub: '69,956 SF · 48 suites',   sf: 69956,  cs: 1 },
+    { name: 'Tower Low (L8–L15)',    sub: '63,350 SF · 8 floors',    sf: 63350,  cs: 2 },
+    { name: 'Tower Mid (L16–L24)',   sub: '90,450 SF · 9 floors',    sf: 90450,  cs: 4 },
+    { name: 'Tower High (L25–L32)', sub: '61,300 SF · 8 floors',    sf: 61300,  cs: 6 },
+    { name: 'Upper (L33–L34)',       sub: '14,775 SF · Penthouse',   sf: 14775,  cs: 7 },
   ];
+
+  var rows = [];
+  var maxEnd = 0;
+
+  sections.forEach(function(s) {
+    var rD = dw(s.sf, 150), fD = dw(s.sf, 185), pD = dw(s.sf, 210);
+    var rs = s.cs, re = rs + rD;
+    var fs = re,  fe = fs + fD;
+    var ps = fe,  pe = ps + pD;
+    maxEnd = Math.max(maxEnd, pe);
+    rows.push({ name: s.name, sub: s.sub, bars: [
+      { s: rs, e: re, cls: 'bar-rough', txt: 'Rough' },
+      { s: fs, e: fe, cls: 'bar-fine',  txt: 'Fine'  },
+      { s: ps, e: pe, cls: 'bar-pdi',   txt: 'PDI'   },
+    ]});
+  });
+
+  // Non-Res: starts when Tower Mid Rough ends
+  var nrS = rows[2].bars[0].e;
+  var nrE = nrS + dw(83025, 185);
+  maxEnd = Math.max(maxEnd, nrE);
+  rows.push({ name: 'Non-Res + Common', sub: '83,025 SF · All levels', bars: [
+    { s: nrS, e: nrE, cls: 'bar-nonres', txt: 'Non-Res Final' }
+  ]});
+
+  // QC: after all residential PDI, min 1 week
+  var pdiEnds = rows.slice(0, 5).map(function(r){ return r.bars[2].e; });
+  var qcS = Math.max.apply(null, pdiEnds);
+  var qcE = qcS + Math.max(dw(20000, 210), 1);
+  maxEnd = Math.max(maxEnd, qcE);
+  rows.push({ name: 'QC + Walkthroughs', sub: 'Final sign-off · Handover', bars: [
+    { s: qcS, e: qcE, cls: 'bar-qc', txt: 'QC & Handover' }
+  ]});
+
+  var WEEKS = Math.max(Math.ceil(maxEnd) + 1, 8);
+  return { rows: rows, WEEKS: WEEKS, qcEnd: qcE, podiumDone: rows[0].bars[2].e };
+}
+
+function buildGantt(crew) {
+  crew = crew || 8;
+  var d = buildGanttData(crew);
+  var WEEKS = d.WEEKS, W = 100 / WEEKS;
+  var totalWeeks = Math.round(d.qcEnd);
+
+  // Week labels
+  var wlC = document.getElementById('gantt-week-labels');
+  wlC.innerHTML = '';
+  for (var wk = 1; wk <= WEEKS; wk++) {
+    var lbl = document.createElement('div');
+    lbl.style.cssText = 'flex:1;text-align:center;font-size:9px;font-weight:700;color:var(--faint);letter-spacing:.5px;white-space:nowrap';
+    lbl.textContent = wk === 1 ? 'WK 1' : wk % 2 === 0 ? 'WK ' + wk : '';
+    wlC.appendChild(lbl);
+  }
+
+  // Rows
   var container = document.getElementById('gantt-rows');
-  rows.forEach(function(row) {
+  container.innerHTML = '';
+
+  d.rows.forEach(function(row) {
     var rowEl = document.createElement('div');
     rowEl.style.cssText = 'display:flex;align-items:center;margin-bottom:12px;min-height:40px';
     var labelEl = document.createElement('div');
     labelEl.style.cssText = 'width:190px;flex-shrink:0;padding-right:16px';
-    labelEl.innerHTML = '<div style="font-size:11px;font-weight:700;color:var(--text)">' + row.name + '</div><div style="font-size:9px;color:var(--faint);margin-top:2px">' + row.sub + '</div>';
-    var timelineEl = document.createElement('div');
-    timelineEl.style.cssText = 'flex:1;position:relative;height:36px;background:rgba(255,255,255,.02);border-radius:6px;overflow:visible';
+    labelEl.innerHTML =
+      '<div style="font-size:11px;font-weight:700;color:var(--text)">' + row.name + '</div>' +
+      '<div style="font-size:9px;color:var(--faint);margin-top:2px">' + row.sub + '</div>';
+    var tl = document.createElement('div');
+    tl.style.cssText = 'flex:1;position:relative;height:36px;background:rgba(255,255,255,.02);border-radius:6px;overflow:visible';
+
     for (var ww = 0; ww < WEEKS; ww++) {
       if (ww % 2 === 0) {
         var bg = document.createElement('div');
-        bg.style.cssText = 'position:absolute;left:' + (ww*W) + '%;width:' + W + '%;top:0;bottom:0;background:rgba(255,255,255,.015);pointer-events:none';
-        timelineEl.appendChild(bg);
+        bg.style.cssText = 'position:absolute;left:' + (ww*W).toFixed(2) + '%;width:' + W.toFixed(2) + '%;top:0;bottom:0;background:rgba(255,255,255,.015);pointer-events:none';
+        tl.appendChild(bg);
       }
     }
+
     row.bars.forEach(function(bar) {
-      var left = ((bar.s - 1) / WEEKS * 100);
-      var width = ((bar.e - bar.s) / WEEKS * 100);
+      var left  = ((bar.s - 1) / WEEKS * 100);
+      var width = Math.max((bar.e - bar.s) / WEEKS * 100, 0.8);
       var barEl = document.createElement('div');
       barEl.className = 'gantt-bar ' + bar.cls;
-      barEl.style.cssText = 'left:' + left + '%;width:' + width + '%;';
+      barEl.style.cssText = 'left:' + left.toFixed(2) + '%;width:' + width.toFixed(2) + '%;';
       barEl.textContent = bar.txt;
-      barEl.title = bar.txt + ': Week ' + bar.s + ' to Week ' + bar.e;
-      timelineEl.appendChild(barEl);
+      barEl.title = bar.txt + ' · Wk ' + bar.s.toFixed(1) + ' → Wk ' + bar.e.toFixed(1);
+      tl.appendChild(barEl);
     });
+
     rowEl.appendChild(labelEl);
-    rowEl.appendChild(timelineEl);
+    rowEl.appendChild(tl);
     container.appendChild(rowEl);
   });
-  var milestonesRow = document.createElement('div');
-  milestonesRow.style.cssText = 'display:flex;align-items:center;margin-top:8px;margin-bottom:4px;min-height:28px';
-  var mlLabel = document.createElement('div');
-  mlLabel.style.cssText = 'width:190px;flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint);padding-right:16px';
-  mlLabel.textContent = 'Milestones';
-  var mlTimeline = document.createElement('div');
-  mlTimeline.style.cssText = 'flex:1;position:relative;height:28px';
+
+  // Milestones
+  var msRow = document.createElement('div');
+  msRow.style.cssText = 'display:flex;align-items:center;margin-top:8px;margin-bottom:4px;min-height:28px';
+  var msLabel = document.createElement('div');
+  msLabel.style.cssText = 'width:190px;flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint);padding-right:16px';
+  msLabel.textContent = 'Milestones';
+  var msTL = document.createElement('div');
+  msTL.style.cssText = 'flex:1;position:relative;height:28px';
   var milestones = [
-    { week: 4, label: '[P] Podium Done', color: 'var(--purple)' },
-    { week: 8, label: '[M] Midpoint', color: 'var(--yellow)' },
-    { week: 13, label: '[Q] Final QC', color: 'var(--blue)' },
-    { week: 16, label: '[H] Handover', color: 'var(--red)' },
+    { week: d.podiumDone, label: '◆ Podium Done', color: 'var(--purple)' },
+    { week: d.qcEnd / 2,  label: '◆ Midpoint',    color: 'var(--yellow)' },
+    { week: d.qcEnd - 0.8, label: '◆ Final QC',   color: 'var(--blue)'   },
+    { week: d.qcEnd,       label: '◆ Handover',   color: 'var(--red)'    },
   ];
   milestones.forEach(function(m) {
+    if (m.week <= 0 || m.week > WEEKS + 1) return;
     var ml = document.createElement('div');
-    ml.style.cssText = 'position:absolute;left:' + ((m.week-1)/WEEKS*100) + '%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px';
-    ml.innerHTML = '<div style="width:1px;height:14px;background:' + m.color + ';opacity:.5"></div><div style="font-size:8px;font-weight:700;color:' + m.color + ';white-space:nowrap;letter-spacing:.3px">' + m.label + '</div>';
-    mlTimeline.appendChild(ml);
+    ml.style.cssText = 'position:absolute;left:' + (Math.min((m.week-1)/WEEKS*100, 99)).toFixed(2) + '%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px';
+    ml.innerHTML =
+      '<div style="width:1px;height:14px;background:' + m.color + ';opacity:.6"></div>' +
+      '<div style="font-size:8px;font-weight:700;color:' + m.color + ';white-space:nowrap;letter-spacing:.3px">' + m.label + '</div>';
+    msTL.appendChild(ml);
   });
-  milestonesRow.appendChild(mlLabel);
-  milestonesRow.appendChild(mlTimeline);
-  container.appendChild(milestonesRow);
+  msRow.appendChild(msLabel);
+  msRow.appendChild(msTL);
+  container.appendChild(msRow);
+
+  // Update summary
+  var sumEl = document.getElementById('gantt-summary');
+  if (sumEl) {
+    var peakCrew = Math.min(crew * 2, 20);
+    sumEl.innerHTML =
+      '<div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Total Duration</span><br>' +
+      '<span style="font-size:16px;font-weight:900;color:var(--text)">' + totalWeeks + ' Weeks</span></div>' +
+      '<div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Phases Concurrent</span><br>' +
+      '<span style="font-size:16px;font-weight:900;color:var(--blue)">Up to 3</span></div>' +
+      '<div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Peak Crew Count</span><br>' +
+      '<span style="font-size:16px;font-weight:900;color:var(--green)">' + crew + '–' + peakCrew + ' workers</span></div>' +
+      '<div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Phase Sign-offs</span><br>' +
+      '<span style="font-size:16px;font-weight:900;color:var(--yellow)">Per Floor</span></div>' +
+      '<div><span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint)">Handover Target</span><br>' +
+      '<span style="font-size:16px;font-weight:900;color:var(--red)">Week ' + totalWeeks + '</span></div>';
+  }
+
+  // Re-apply phase highlight after rebuild
+  highlightGanttPhase(currentPhase.hlCls);
 }
 
-// -- HERO COUNTER ANIMATION --
-function animateCounter(el, target, suffix) {
-  suffix = suffix || '';
-  var startTime = null;
-  var duration = 1600;
-  function fmt(n) { return n >= 1000 ? n.toLocaleString() : String(n); }
+// ── GANTT PHASE HIGHLIGHT ──────────────────────────────────────────────────
+function highlightGanttPhase(activeCls) {
+  document.querySelectorAll('.gantt-bar').forEach(function(bar) {
+    if (!activeCls || bar.classList.contains(activeCls) || bar.classList.contains('bar-qc')) {
+      bar.style.opacity = '';
+      bar.style.filter  = '';
+    } else {
+      bar.style.opacity = '0.2';
+      bar.style.filter  = 'grayscale(60%)';
+    }
+  });
+}
+
+// ── HERO COUNTER ───────────────────────────────────────────────────────────
+function animateCounter(el, target) {
+  var startTime = null, duration = 1600;
+  function fmt(n){ return n >= 1000 ? n.toLocaleString() : String(n); }
   function step(ts) {
     if (!startTime) startTime = ts;
     var p = Math.min((ts - startTime) / duration, 1);
     var ease = 1 - Math.pow(1 - p, 3);
-    el.textContent = fmt(Math.floor(ease * target)) + suffix;
+    el.textContent = fmt(Math.floor(ease * target));
     if (p < 1) requestAnimationFrame(step);
-    else el.textContent = fmt(target) + suffix;
+    else el.textContent = fmt(target);
   }
   requestAnimationFrame(step);
 }
 
-// -- INIT --
+// ── INIT ───────────────────────────────────────────────────────────────────
 window.addEventListener('load', function() {
   initProdChart();
-  buildGantt();
+  buildGantt(8);
   updateCalc();
-  // Hero counter animation with IntersectionObserver for reliability
   var counters = [
-    { id: 'cnt-sf',     val: 389631, suffix: '' },
-    { id: 'cnt-floors', val: 39,     suffix: '' },
-    { id: 'cnt-suites', val: 91,     suffix: '' },
-    { id: 'cnt-phases', val: 4,      suffix: '' },
+    { id: 'cnt-sf',     val: 389631 },
+    { id: 'cnt-floors', val: 39     },
+    { id: 'cnt-suites', val: 322    },
+    { id: 'cnt-phases', val: 3      },
   ];
-  // Set final values immediately as fallback
   counters.forEach(function(c) {
     var el = document.getElementById(c.id);
     if (el) el.textContent = c.val >= 1000 ? c.val.toLocaleString() : String(c.val);
   });
-  // Then animate if IntersectionObserver supported
   if ('IntersectionObserver' in window) {
     var heroStats = document.querySelector('.hero-stats');
     if (heroStats) {
@@ -1500,7 +1546,7 @@ window.addEventListener('load', function() {
           if (entry.isIntersecting) {
             counters.forEach(function(c) {
               var el = document.getElementById(c.id);
-              if (el) animateCounter(el, c.val, c.suffix);
+              if (el) animateCounter(el, c.val);
             });
             obs.disconnect();
           }
@@ -1510,6 +1556,128 @@ window.addEventListener('load', function() {
     }
   }
 });
+
+
+// ═══════════════════════════════════════════════════════
+// LIVE PRICING CALCULATOR — Quote Ref 0893
+// Per-unit rates derived exactly from quoted subtotals
+// ═══════════════════════════════════════════════════════
+var CALC_UNITS = [
+  { key:'u1B',   label:'1 Bedroom',           qty:115, constr:11325/115, pdi:9995/115,  fin:7140/115  },
+  { key:'u1BD',  label:'1 Bed + Den (& BF)',  qty:57,  constr:7645/57,   pdi:6775/57,   fin:4850/57   },
+  { key:'u2B',   label:'2 Bedroom',           qty:99,  constr:15895/99,  pdi:13990/99,  fin:9990/99   },
+  { key:'u2B2F', label:'2 Bed Barrier-Free',  qty:18,  constr:3045/18,   pdi:2750/18,   fin:1965/18   },
+  { key:'u3B',   label:'3 Bedroom',           qty:14,  constr:2945/14,   pdi:2665/14,   fin:1905/14   },
+  { key:'u3BBF', label:'3 Bed Barrier-Free',  qty:14,  constr:2640/14,   pdi:2395/14,   fin:1710/14   },
+  { key:'u3BD',  label:'3 Bed + Den',         qty:5,   constr:1105/5,    pdi:1055/5,    fin:755/5     },
+];
+var calcEditMode = false;
+var ADDON_PRICES = { windows:39750, hvac:5600, sump:4950, labour:6100, fourth:28545 };
+
+function fmtC(n){ return '$' + Math.round(n).toLocaleString('en-CA'); }
+function fmtFull(n){ return '$' + n.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function setEl(id,val){ var e=document.getElementById(id); if(e) e.textContent=val; }
+
+function buildCalcRows() {
+  var tb = document.getElementById('calc-tbody');
+  if (!tb) return;
+  tb.innerHTML = CALC_UNITS.map(function(u) {
+    var c=u.qty*u.constr, p=u.qty*u.pdi, f=u.qty*u.fin, row=c+p+f;
+    var qtyCell = calcEditMode
+      ? '<input type="number" class="calc-input" id="cq-'+u.key+'" value="'+u.qty+'" min="0" max="999" oninput="calcLive()">'
+      : '<span style="font-family:monospace;font-weight:700;font-size:13px" id="cq-'+u.key+'">'+u.qty+'</span>';
+    return '<tr>'+
+      '<td style="font-weight:600;font-size:12px">'+u.label+'</td>'+
+      '<td style="text-align:center">'+qtyCell+'</td>'+
+      '<td style="text-align:right;font-family:monospace;color:rgba(156,127,255,.85)" id="cc-'+u.key+'">'+fmtC(c)+'</td>'+
+      '<td style="text-align:right;font-family:monospace;color:rgba(77,166,255,.85)"  id="cp-'+u.key+'">'+fmtC(p)+'</td>'+
+      '<td style="text-align:right;font-family:monospace;color:rgba(0,200,150,.85)"   id="cf-'+u.key+'">'+fmtC(f)+'</td>'+
+      '<td style="text-align:right;font-family:monospace;font-weight:800;color:var(--text)" id="cr-'+u.key+'">'+fmtC(row)+'</td>'+
+    '</tr>';
+  }).join('');
+}
+
+function calcLive() {
+  var suiteC=0, suiteP=0, suiteF=0, suiteTot=0;
+  CALC_UNITS.forEach(function(u) {
+    var el = document.getElementById('cq-'+u.key);
+    var qty = el ? (parseInt(calcEditMode ? el.value : el.textContent)||0) : u.qty;
+    var c=qty*u.constr, p=qty*u.pdi, f=qty*u.fin, row=c+p+f;
+    suiteC+=c; suiteP+=p; suiteF+=f; suiteTot+=row;
+    setEl('cc-'+u.key, fmtC(c));
+    setEl('cp-'+u.key, fmtC(p));
+    setEl('cf-'+u.key, fmtC(f));
+    setEl('cr-'+u.key, fmtC(row));
+  });
+  setEl('phase-constr',    fmtC(suiteC));
+  setEl('phase-pdi',       fmtC(suiteP));
+  setEl('phase-final',     fmtC(suiteF));
+  setEl('suite-subtotal',  fmtC(suiteTot));
+
+  var amenity = (document.getElementById('scope-amenity')||{}).checked ? 23880 : 0;
+  var parking = (document.getElementById('scope-parking')||{}).checked ? 8950  : 0;
+  var addonTot = 0;
+  Object.keys(ADDON_PRICES).forEach(function(k) {
+    var cb  = document.getElementById('ao-'+k);
+    var row = document.getElementById('ao-'+k+'-row');
+    if (cb && cb.checked) addonTot += ADDON_PRICES[k];
+    if (row) row.className = 'addon-row'+(cb && cb.checked ? ' ao-active' : '');
+  });
+  ['amenity','parking'].forEach(function(s) {
+    var cb  = document.getElementById('scope-'+s);
+    var row = document.getElementById('scope-'+s+'-row');
+    if (row && cb) row.style.opacity = cb.checked ? '1' : '0.4';
+  });
+
+  var subtotal = suiteTot + amenity + parking + addonTot;
+  var hst = subtotal * 0.13;
+  setEl('tot-subtotal', fmtFull(subtotal));
+  setEl('tot-hst',      fmtFull(hst));
+  setEl('tot-total',    fmtFull(subtotal + hst));
+}
+
+function toggleCalcMode() {
+  calcEditMode = !calcEditMode;
+  var btn=document.getElementById('calc-mode-btn');
+  var dot=document.getElementById('calc-mode-dot');
+  var badge=document.getElementById('live-badge');
+  var lbl=document.getElementById('calc-mode-label');
+  var desc=document.getElementById('calc-banner-desc');
+  if (calcEditMode) {
+    if(btn){btn.style.borderColor='var(--green)';btn.style.color='var(--green)';btn.style.background='rgba(0,200,150,0.1)';}
+    if(dot)   dot.style.background = 'var(--green)';
+    if(badge) badge.style.display  = 'inline-block';
+    if(lbl)   lbl.textContent = 'EDIT MODE: ON';
+    if(desc)  desc.textContent = 'Type any unit quantity — all prices update instantly';
+  } else {
+    if(btn){btn.style.borderColor='rgba(156,127,255,0.3)';btn.style.color='var(--purple)';btn.style.background='rgba(156,127,255,0.08)';}
+    if(dot)   dot.style.background = 'var(--faint)';
+    if(badge) badge.style.display  = 'none';
+    if(lbl)   lbl.textContent = 'EDIT MODE: OFF';
+    if(desc)  desc.textContent = 'Activate Edit Mode to adjust unit mix during client conversations';
+  }
+  buildCalcRows();
+  calcLive();
+}
+
+function toggleScope(ev, which) {
+  if (ev.target.type === 'checkbox') return;
+  ev.preventDefault();
+  var cb = document.getElementById('scope-'+which);
+  if (cb) { cb.checked = !cb.checked; calcLive(); }
+}
+
+function toggleAddon(ev, which) {
+  if (ev.target.type === 'checkbox') return;
+  ev.preventDefault();
+  var cb = document.getElementById('ao-'+which);
+  if (cb) { cb.checked = !cb.checked; calcLive(); }
+}
+
+document.addEventListener('DOMContentLoaded', function() { buildCalcRows(); calcLive(); });
+
+
 </script>
+
 </body>
 </html>
